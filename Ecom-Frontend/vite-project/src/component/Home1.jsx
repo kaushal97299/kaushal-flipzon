@@ -64,7 +64,7 @@ const Home1 = () => {
           ) : (
             carouselImages.map((image, index) => (
               <div key={index} className={`carousel-item ${index === 0 ? "active" : ""}`}>
-                <img src={`https://kaushal-flipzon.onrender.com/uploadsCarou/${image}`} className="d-block w-100 carousel-img" alt={`carousel-${index}`} />
+                <img src={image} className="d-block w-100 carousel-img" alt={`carousel-${index}`} />
               </div>
             ))
           )}
