@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./About.css";
 import { FaUsers, FaShoppingCart, FaGlobe } from "react-icons/fa";
+import KaushalImg from "../image/kaushal.jpg";
+import AmitImg from "../image/logo-removebg-preview.png";
 const About = () => {
   const [customers, setCustomers] = useState(0);
   const [products, setProducts] = useState(0);
@@ -72,7 +74,7 @@ const About = () => {
             <div className="flip-card">
               <div className="flip-card-inner">
                 <div className="flip-card-front">
-                  <img src="/src/image/kaushal.jpg" alt="Kaushal" />
+                  <img src={KaushalImg} alt="Kaushal" />
                   <h3>Kaushal</h3>
                 </div>
                 <div className="flip-card-back">
@@ -86,7 +88,7 @@ const About = () => {
             <div className="flip-card">
               <div className="flip-card-inner">
                 <div className="flip-card-front">
-                  <img src="/src/image/images.png" alt="Amit Kumar" />
+                  <img src={AmitImg} alt="Amit Kumar" />
                   <h3>Amit Kumar</h3>
                 </div>
                 <div className="flip-card-back">
