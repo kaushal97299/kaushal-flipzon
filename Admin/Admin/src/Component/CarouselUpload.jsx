@@ -41,7 +41,7 @@ const CarouselUploader = () => {
     });
 
     try {
-      await axios.post("https://ecommerce-atbk.onrender.com/api/carousel/upload", formData, {
+      await axios.post("https://kaushal-flipzon.onrender.com/api/carousel/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }

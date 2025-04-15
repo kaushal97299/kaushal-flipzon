@@ -25,7 +25,7 @@ app.post("/upload", upload.array("images", 3), async (req, res) => {
     const savedImages = await Promise.all(
       req.files.map(async (file) => {
         const newImage = new CarouselImage({
-          imageUrl: `https://ecommerce-atbk.onrender.com/uploadsCarou/${file.filename}`,
+          imageUrl: `https://kaushal-flipzon.onrender.com/uploadsCarou/${file.filename}`,
         });
         return await newImage.save();
       })

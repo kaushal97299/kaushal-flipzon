@@ -3,7 +3,7 @@ import axios from 'axios';
 import './AdminContact.css';
 
 const api = axios.create({
-  baseURL: 'https://ecommerce-atbk.onrender.com/api/contact',
+  baseURL: 'https://kaushal-flipzon.onrender.com/api/contact',
 });
 
 const AdminContacts = () => {

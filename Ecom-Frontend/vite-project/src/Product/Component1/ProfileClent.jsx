@@ -44,7 +44,7 @@ const Profile = () => {
         formData.append("profileImage", user.profileImage);
       }
 
-      const response = await fetch("https://ecommerce-atbk.onrender.com/api/auth/profileupdate", {
+      const response = await fetch("https://kaushal-flipzon.onrender.com/api/auth/profileupdate", {
         method: "POST",
         body: formData,
       });
@@ -100,7 +100,7 @@ const Profile = () => {
           <div>
             {user.profileImage && (
               <div className="profile-img-container">
-                <img src={`https://ecommerce-atbk.onrender.com/${user.profileImage}`} alt="Profile" />
+                <img src={`https://kaushal-flipzon.onrender.com/${user.profileImage}`} alt="Profile" />
               </div>
             )}
             <p className="tesst"><strong>Name:</strong> {user.name}</p>

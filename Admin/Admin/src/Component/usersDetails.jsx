@@ -27,7 +27,7 @@ function AdminUser() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://ecommerce-atbk.onrender.com/api/auth/${id}`);
+            await axios.delete(`https://kaushal-flipzon.onrender.com/api/auth/${id}`);
             fetchUserData();
             toast.success('User deleted successfully');
         } catch (error) {

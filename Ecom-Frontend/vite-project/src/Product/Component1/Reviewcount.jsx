@@ -16,7 +16,7 @@ const ProductReviewTable = ({ Id }) => {
     if (!Id) return;
     setLoading(true);
     try {
-      const res = await axios.get(`http://localhost:4000/api/reviews/rew/${Id}`);
+      const res = await axios.get(`https://kaushal-flipzon.onrender.com/api/reviews/rew/${Id}`);
       setReviews(res.data);
     } catch (error) {
       toast.error('Failed to load reviews');
@@ -27,7 +27,7 @@ const ProductReviewTable = ({ Id }) => {
 
   const handleDelete = async (reviewId) => {
     try {
-      await axios.delete(`http://localhost:4000/api/reviews/rew/${reviewId}`);
+      await axios.delete(`https://kaushal-flipzon.onrender.com/api/reviews/rew/${reviewId}`);
       toast.success('Review deleted');
       fetchReviews();
     } catch (error) {

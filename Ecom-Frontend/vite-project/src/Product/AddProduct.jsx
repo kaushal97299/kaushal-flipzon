@@ -69,7 +69,7 @@ const ProductForm = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post("https://ecommerce-atbk.onrender.com/api/products/add", data, {
+      const response = await axios.post("https://kaushal-flipzon.onrender.com/api/products/add", data, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

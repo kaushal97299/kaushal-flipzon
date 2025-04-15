@@ -28,7 +28,7 @@ const BuyNow = () => {
       }
 
       try {
-        const response = await axios.get("https://ecommerce-atbk.onrender.com/api/auth/users", {
+        const response = await axios.get("https://kaushal-flipzon.onrender.com/api/auth/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserId(response.data.userId);
@@ -104,7 +104,7 @@ const BuyNow = () => {
 
     try {
       console.log("Sending Order Details:", orderDetails);
-      const response = await fetch("https://ecommerce-atbk.onrender.com/api/orders", {
+      const response = await fetch("https://kaushal-flipzon.onrender.com/api/orders", {
         method: "POST",
         headers: { "Content-Type": "application/json" ,userId },
         body: JSON.stringify(orderDetails),
@@ -140,7 +140,7 @@ const BuyNow = () => {
                 {product ? (
                   <>
                     <img
-                      src={`https://ecommerce-atbk.onrender.com/uploads/${product.image}`}
+                      src={`https://kaushal-flipzon.onrender.com/uploads/${product.image}`}
                       alt={product.pname}
                       className="imggs"
                       style={{ maxWidth: "200px" }}

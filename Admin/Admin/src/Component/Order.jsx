@@ -28,7 +28,7 @@ function Orderdet() {
     const fetchOrderData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("https://ecommerce-atbk.onrender.com/api/orders/Orders");
+            const response = await axios.get("https://kaushal-flipzon.onrender.com/api/orders/Orders");
             console.log("API Response:", response.data);
             setOrders(response.data || []);
             setFilteredOrders(response.data || []);
@@ -41,7 +41,7 @@ function Orderdet() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://ecommerce-atbk.onrender.com/api/orders/${id}`);
+            await axios.delete(`https://kaushal-flipzon.onrender.com/api/orders/${id}`);
             fetchOrderData();
             toast.success('Order deleted successfully');
         } catch (error) {

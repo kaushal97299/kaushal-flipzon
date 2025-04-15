@@ -21,7 +21,7 @@ const ProductManagement = () => {
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await axios.get("https://ecommerce-atbk.onrender.com/api/products/prod");
+      const response = await axios.get("https://kaushal-flipzon.onrender.com/api/products/prod");
       if (response.data && Array.isArray(response.data)) {
         setProducts(response.data);
       } else {
@@ -40,7 +40,7 @@ const ProductManagement = () => {
 
     try {
       setLoading(true);
-      await axios.delete(`https://ecommerce-atbk.onrender.com/api/products/${id}`);
+      await axios.delete(`https://kaushal-flipzon.onrender.com/api/products/${id}`);
       toast.success("Product deleted successfully!");
       fetchProducts();
     } catch (error) {
@@ -95,7 +95,7 @@ const ProductManagement = () => {
                 <td>
                   {product.image ? (
                     <Image
-                      src={`https://ecommerce-atbk.onrender.com/uploads/${product.image}`}
+                      src={`https://kaushal-flipzon.onrender.com/uploads/${product.image}`}
                       alt={product.name}
                       thumbnail
                       width={50}
