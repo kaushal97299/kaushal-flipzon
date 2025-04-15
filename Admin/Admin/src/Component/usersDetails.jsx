@@ -16,7 +16,7 @@ function AdminUser() {
     const fetchUserData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("https://ecommerce-atbk.onrender.com/api/auth/users");
+            const response = await axios.get("https://kaushal-flipzon.onrender.com/api/auth/users");
             setUsers(response.data.users || []);
         } catch (error) {
             console.error('Error fetching user data:', error.response?.data || error.message);
