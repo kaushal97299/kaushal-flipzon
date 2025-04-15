@@ -3,7 +3,7 @@
   margin: 2rem auto;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
   max-width: 1500px;
   margin-top: 7%;
 }
@@ -191,6 +191,7 @@
 @media (max-width: 576px) {
   .carousel-img {
     height: 250px;
+    margin-top: 7%;
   }
   
   .category-container {
@@ -217,6 +218,7 @@
     margin-top: 13%;
   }
 }
+
 
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {

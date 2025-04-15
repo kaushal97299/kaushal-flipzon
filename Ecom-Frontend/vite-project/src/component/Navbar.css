@@ -212,7 +212,7 @@
   .navbar-collapse {
     display: none;
     flex-direction: column;
-    background-color: #007bff;
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
     position: absolute;
     top: 60px;
     left: 0;
