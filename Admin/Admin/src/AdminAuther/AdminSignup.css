@@ -1,0 +1,209 @@
+/* General container styling with shadow */
+.conta {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.conta:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Title Styling */
+.adminw {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Form Styling */
+.sig {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  animation: slideUp 1s ease-in-out;
+}
+
+/* Input Fields */
+.inn1 {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+  box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.inn1:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.6);
+}
+
+/* Button Styling */
+.buut1 {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s ease-in-out;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.buut1:hover {
+  background: #0056b3;
+  transform: scale(1.05);
+}
+
+.buut1:active {
+  transform: scale(0.95);
+}
+
+/* Login Link */
+.pp {
+  margin-top: 15px;
+  font-size: 14px;
+  animation: fadeIn 1.2s ease-in-out;
+}
+
+.pp a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease-in-out;
+}
+
+.pp a:hover {
+  color: #0056b3;
+  text-decoration: underline;
+}
+
+/* =================== MEDIA QUERIES =================== */
+
+/* Large Desktops (1200px and above) */
+@media screen and (min-width: 1200px) {
+  .conta {
+    max-width: 500px;
+    padding: 25px;
+  }
+  .adminw {
+    font-size: 28px;
+  }
+  .inn1,
+  .buut1 {
+    font-size: 18px;
+    padding: 12px;
+  }
+}
+
+/* Laptops (992px - 1199px) */
+@media screen and (max-width: 1199px) {
+  .conta {
+    max-width: 450px;
+  }
+  .adminw {
+    font-size: 26px;
+  }
+}
+
+/* Tablets (768px - 991px) */
+@media screen and (max-width: 991px) {
+  .conta {
+    max-width: 90%;
+    padding: 20px;
+  }
+  .adminw {
+    font-size: 24px;
+  }
+  .inn1,
+  .buut1 {
+    font-size: 16px;
+    padding: 10px;
+  }
+}
+
+/* Mobile (576px - 767px) */
+@media screen and (max-width: 767px) {
+  .conta {
+    max-width: 85%;
+  }
+  .adminw {
+    font-size: 22px;
+  }
+  .inn1,
+  .buut1 {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+/* Small Mobile (480px - 575px) */
+@media screen and (max-width: 575px) {
+  .conta {
+    max-width: 90%;
+    padding: 15px;
+  }
+  .adminw {
+    font-size: 20px;
+  }
+  .inn1,
+  .buut1 {
+    font-size: 14px;
+    padding: 8px;
+  }
+}
+
+/* Extra Small Mobile (320px - 479px) */
+@media screen and (max-width: 479px) {
+  .conta {
+    max-width: 95%;
+    padding: 12px;
+  }
+  .adminw {
+    font-size: 18px;
+  }
+  .inn1,
+  .buut1 {
+    font-size: 13px;
+    padding: 6px;
+  }
+}
+
+/* =================== ANIMATIONS =================== */
+
+/* Fade In Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Slide Up Animation */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

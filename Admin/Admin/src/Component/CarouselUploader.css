@@ -1,0 +1,212 @@
+/* CarouselUploader.css */
+
+.carou {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: linear-gradient(145deg, #ffffff, #f0f0f0);
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.carou:hover {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.carou2 {
+  display: none; /* Hide default input */
+}
+
+.custom-file-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 200px;
+  padding: 2rem;
+  border: 2px dashed #4a6cf7;
+  border-radius: 12px;
+  background-color: rgba(74, 108, 247, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.custom-file-upload:hover {
+  background-color: rgba(74, 108, 247, 0.1);
+  border-color: #3a5bd9;
+}
+
+.custom-file-upload::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(74, 108, 247, 0.1),
+    transparent
+  );
+  transition: 0.5s;
+}
+
+.custom-file-upload:hover::before {
+  left: 100%;
+}
+
+.upload-icon {
+  font-size: 3rem;
+  color: #4a6cf7;
+  margin-bottom: 1rem;
+}
+
+.upload-text {
+  font-size: 1.1rem;
+  color: #4a6cf7;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.upload-hint {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+}
+
+.preview-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.preview-item {
+  position: relative;
+  width: calc(33.333% - 1rem);
+  aspect-ratio: 1;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.preview-item:hover {
+  transform: scale(1.03);
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 24px;
+  height: 24px;
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.preview-item:hover .remove-btn {
+  opacity: 1;
+}
+
+.caru3 {
+  width: 100%;
+  padding: 12px 24px;
+  background: linear-gradient(to right, #4a6cf7, #3a5bd9);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(74, 108, 247, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.caru3:hover {
+  background: linear-gradient(to right, #3a5bd9, #2a4bb9);
+  box-shadow: 0 6px 8px rgba(74, 108, 247, 0.3);
+  transform: translateY(-2px);
+}
+
+.caru3:active {
+  transform: translateY(0);
+}
+
+.caru3::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 5px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  opacity: 0;
+  border-radius: 100%;
+  transform: scale(1, 1) translate(-50%);
+  transform-origin: 50% 50%;
+}
+
+.caru3:focus:not(:active)::after {
+  animation: ripple 1s ease-out;
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0, 0);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(20, 20);
+    opacity: 0;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .carou {
+    padding: 1.5rem;
+  }
+  
+  .preview-item {
+    width: calc(50% - 0.5rem);
+  }
+}
+
+@media (max-width: 480px) {
+  .carou {
+    padding: 1rem;
+  }
+  
+  .preview-item {
+    width: 100%;
+  }
+}

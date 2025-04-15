@@ -1,0 +1,267 @@
+/* === Navbar Container === */
+.navb {
+  background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+  color: #fff;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 100;
+  margin-left: -1%;
+  margin-right: 1%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: background 0.4s ease-in-out;
+  height: 75px;
+
+}
+
+.contat {
+  display: flex;
+  justify-content: space-between;
+  /* align-items: center; */
+  padding: 0.8rem 1.5rem;
+  max-width: 1300px;
+  margin: auto;
+}
+
+/* === Brand === */
+.navbar-brand {
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  background: linear-gradient(to right, #f46b45, #eea849);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+  color: #e0f7fa;
+}
+
+/* === Toggler === */
+.navbar-toggler {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.navbar-toggler:active {
+  transform: scale(0.95);
+}
+
+/* === Nav Collapse === */
+.navbar-collapse {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.navbar-collapse.show {
+  animation: fadeSlideDown 0.4s ease-in-out;
+}
+
+/* === Nav Items === */
+.nav-ul {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  /* margin-top: -2% */
+}
+
+.itemm {
+  margin: 0 12px;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  padding: 8px 12px;
+  transition: all 0.3s ease;
+  /* margin-top: -2%; */
+}
+
+.nav-link:hover {
+  color: #f1f1f1;
+  text-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+}
+
+/* === Search === */
+.searchbar {
+  display: flex;
+  /* align-items: center; */
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  padding: 2px 10px;
+  margin: -10px 0;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.searchbar.focused {
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.4);
+}
+
+.searchinput {
+  border: none;
+  background: transparent;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  width: 200px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.searchinput::placeholder {
+  color: #e0e0e0;
+}
+
+.buttonserch {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.buttonserch:hover {
+  color: #e0f7fa;
+}
+
+/* === Badge === */
+.badge {
+  background-color: #ff3e57;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px 7px;
+  font-size: 0.75rem;
+  margin-left: 4px;
+  vertical-align: top;
+  box-shadow: 0 0 6px rgba(255, 62, 87, 0.5);
+}
+
+/* === Dropdown === */
+.dropdown-toggle {
+  background: none !important;
+  border: none !important;
+  color: #fff !important;
+  font-weight: 500;
+}
+
+.dropdown-menu {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.dropdown-item {
+  font-size: 0.95rem;
+  color: #333;
+  padding: 10px 16px;
+  transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
+}
+
+/* === Animations === */
+@keyframes fadeSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* === Responsive Design (11 Breakpoints) === */
+@media (max-width: 1280px) {
+  .searchinput {
+    width: 180px;
+  }
+}
+@media (max-width: 1180px) {
+  .searchinput {
+    width: 160px;
+  }
+}
+@media (max-width: 1024px) {
+  .searchinput {
+    width: 140px;
+  }
+}
+@media (max-width: 920px) {
+  .navbar-toggler {
+    display: block;
+  }
+  .navbar-collapse {
+    display: none;
+    flex-direction: column;
+    background-color: #007bff;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    animation: fadeSlideDown 0.4s ease-in-out;
+  }
+  .navbar-collapse.show {
+    display: flex;
+  }
+  .nav-ul {
+    flex-direction: column;
+    width: 100%;
+  }
+  .itemm {
+    margin: 10px 0;
+  }
+  .searchbar {
+    width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .searchinput {
+    width: 100%;
+  }
+}
+@media (max-width: 640px) {
+  .navbar-brand {
+    font-size: 1.5rem;
+  }
+}
+@media (max-width: 480px) {
+  .contat {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+@media (max-width: 400px) {
+  .nav-link, .dropdown-toggle {
+    font-size: 0.95rem;
+  }
+}
+@media (max-width: 360px) {
+  .searchinput {
+    font-size: 0.9rem;
+  }
+}
+@media (max-width: 320px) {
+  .navbar-brand {
+    font-size: 1.2rem;
+  }
+}

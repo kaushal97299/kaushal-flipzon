@@ -1,0 +1,151 @@
+.contact-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  color: #333;
+  margin-top: 4%;
+}
+
+.contact-content {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.contact-form {
+  flex: 1;
+  min-width: 300px;
+}
+
+.contact-info {
+  flex: 1;
+  min-width: 300px;
+}
+
+.conntt {
+  color: #2c3e50;
+  border-bottom: 2px solid #3498db;
+  padding-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+.submit-button{
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #2980b9;
+}
+
+button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+}
+
+.info-item {
+  margin-bottom: 20px;
+  padding-left: 30px;
+  position: relative;
+}
+
+.info-item i {
+  position: absolute;
+  left: 0;
+  top: 5px;
+  color: #3498db;
+  font-size: 20px;
+}
+
+.success-message {
+  color: #27ae60;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #e8f8f0;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #fdecea;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* For screens 768px to 991px - Tablets */
+@media (max-width: 991px) {
+  .contact-container{
+    margin-top: 10%;
+  }
+}
+
+/* For screens 576px to 767px - Large Mobile */
+@media (max-width: 767px)  {
+  .contact-container{
+    margin-top: 10%;
+  }
+
+}
+
+/* For screens below 576px - Small Mobile */
+@media (max-width: 575px) {
+  .contact-container{
+    margin-top: 10%;
+  }
+}
+/* For screens below 480px - Extra Small Mobile */
+@media (max-width: 480px) {
+  .contact-container{
+    margin-top: 12%;
+  }
+}
+/* For screens below 360px - Extra Extra Small Mobile */
+@media (max-width: 360px) {
+  .contact-container{
+    margin-top: 12%;
+  }
+}
+/* For screens below 320px - Extra Extra Extra Small Mobile */
+@media (max-width: 320px) {
+  .contact-container{
+    margin-top: 12%;
+  }
+}

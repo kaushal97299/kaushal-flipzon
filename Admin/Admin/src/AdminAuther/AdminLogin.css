@@ -1,0 +1,181 @@
+/* General container styling */
+.containe1 {
+  width: 100%;
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  text-align: center;
+}
+
+/* Heading styling */
+.lab2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Input fields */
+.innp2 {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  box-shadow: inset 0px 1px 3px rgba(0, 0, 0, 0.2);
+  transition: 0.3s ease-in-out;
+}
+
+.innp2:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Login button */
+.btcuu {
+  width: 100%;
+  padding: 12px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+}
+
+.btcuu:hover {
+  background-color: #0056b3;
+}
+
+/* Signup link */
+p {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+p a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+p a:hover {
+  text-decoration: underline;
+}
+
+/* Media Queries for Responsive Design */
+
+/* Medium screens (Tablets & Small Laptops) */
+@media screen and (max-width: 768px) {
+  .containe1 {
+    max-width: 90%;
+    padding: 15px;
+  }
+
+  .innp2 {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .btcuu {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
+
+/* Small screens (Mobile devices below 480px) */
+@media screen and (max-width: 480px) {
+  .containe1 {
+    max-width: 95%;
+    padding: 10px;
+  }
+
+  .lab2 {
+    font-size: 20px;
+  }
+
+  .innp2 {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .btcuu {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+/* Extra Small screens (Mobile devices below 400px) */
+@media screen and (max-width: 400px) {
+  .containe1 {
+    max-width: 90%;
+    padding: 8px;
+  }
+
+  .lab2 {
+    font-size: 18px;
+  }
+
+  .innp2 {
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .btcuu {
+    padding: 8px;
+    font-size: 12px;
+  }
+
+  p {
+    font-size: 12px;
+  }
+}
+
+/* Large screens (Desktops & Monitors) */
+@media screen and (min-width: 1200px) {
+  .containe1 {
+    max-width: 500px; /* Increase width for better visibility */
+    padding: 30px;
+  }
+
+  .lab2 {
+    font-size: 28px; /* Bigger heading */
+  }
+
+  .innp2 {
+    padding: 14px;
+    font-size: 18px;
+  }
+
+  .btcuu {
+    padding: 14px;
+    font-size: 18px;
+  }
+}
+
+/* Extra-large screens (4K & Ultra-wide monitors) */
+@media screen and (min-width: 1600px) {
+  .containe1 {
+    max-width: 600px; /* Wider form */
+    padding: 35px;
+  }
+
+  .lab2 {
+    font-size: 32px;
+  }
+
+  .innp2 {
+    padding: 16px;
+    font-size: 20px;
+  }
+
+  .btcuu {
+    padding: 16px;
+    font-size: 20px;
+  }
+}

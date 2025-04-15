@@ -1,0 +1,155 @@
+/* General Styles */
+
+.con123{
+  margin-top: 5%;
+}
+h2.cls {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-top: 30px;
+}
+
+.empty-message {
+  font-size: 1.2rem;
+  text-align: center;
+  color: #888;
+  margin-top: 20px;
+}
+
+/* Product List */
+.product2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.card-container {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.card-container:hover {
+  transform: translateY(-10px); /* Lift effect */
+}
+
+.card-link {
+  text-decoration: none;
+}
+
+.card1 {
+  padding: 20px;
+  text-align: center;
+}
+
+.card1 img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  transition: transform 0.3s ease;
+}
+
+.card1 img:hover {
+  transform: scale(1.05); /* Image zoom effect */
+}
+
+.hh {
+  font-size: 1.5rem;
+  margin: 15px 0;
+  color: #333;
+  font-weight: bold;
+}
+
+.product-price {
+  font-size: 1.2rem;
+  color: #28a745;
+}
+
+.product-price del {
+  color: #dc3545;
+  margin-left: 5px;
+  font-size: 1rem;
+}
+
+.favorite-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.favorite-icon {
+  font-size: 1.5rem;
+  color: #dc3545;
+}
+
+.favorite-icon.active {
+  color: #ff6347;
+}
+
+/* Back to Products Link */
+.back-home {
+  display: block;
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 30px;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.back-home:hover {
+  text-decoration: underline;
+}
+
+/* Media Queries */
+
+/* Mobile Devices */
+@media (max-width: 480px) {
+  .product2 {
+    grid-template-columns: 1fr; /* Single column layout for small screens */
+  }
+
+  .card1 img {
+    height: 180px;
+  }
+
+  .card-container {
+    margin-bottom: 20px;
+  }
+
+  .back-home {
+    font-size: 1.2rem;
+  }
+}
+
+/* Tablet Devices */
+@media (max-width: 768px) {
+  .product2 {
+    grid-template-columns: repeat(2, 1fr); /* Two columns for tablets */
+  }
+
+  .card1 img {
+    height: 220px;
+  }
+}
+
+/* Desktop Devices */
+@media (min-width: 1024px) {
+  .product2 {
+    grid-template-columns: repeat(4, 1fr); /* Four columns for desktop */
+  }
+
+  .card1 img {
+    height: 250px;
+  }
+}

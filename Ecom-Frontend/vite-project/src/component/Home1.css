@@ -1,0 +1,235 @@
+/* Carousel Styles */
+.carousel {
+  margin: 2rem auto;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  max-width: 1500px;
+  margin-top: 7%;
+}
+
+.carousel-inner {
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.carousel-img {
+  height: 500px;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease;
+}
+
+.carousel:hover .carousel-img {
+  transform: scale(1.02);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.carousel:hover .carousel-control-prev,
+.carousel:hover .carousel-control-next {
+  opacity: 1;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  padding: 1.5rem;
+  background-size: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.carousel-control-prev-icon:hover,
+.carousel-control-next-icon:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+/* Category Section */
+.category-container {
+  max-width: 1500px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+}
+
+.category-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 2rem;
+  text-align: center;
+  position: relative;
+}
+
+.category-title::after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(to right, #3498db, #9b59b6);
+  margin: 0.5rem auto;
+  border-radius: 2px;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.category-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: pointer;
+  aspect-ratio: 1/1;
+}
+
+.category-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+}
+
+.category-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.category-item:hover .category-img {
+  transform: scale(1.1);
+}
+
+.category-name {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  color: white;
+  padding: 1.5rem 1rem 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+/* Loading Animation */
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.category-container > p {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #7f8c8d;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .carousel-img {
+    height: 400px;
+  }
+}
+
+@media (max-width: 992px) {
+  .carousel-img {
+    height: 350px;
+  }
+  
+  .category-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+  .carousel {
+    margin: 1rem auto;
+    border-radius: 10px;
+    margin-top: 13%;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel {
+    margin: 1rem auto;
+    border-radius: 10px;
+    margin-top: 13%;
+  }
+  
+  .carousel-img {
+    height: 300px;
+  }
+  
+  .category-container {
+    margin: 3rem auto;
+    padding: 0 1.5rem;
+  }
+  
+  .category-title {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .category-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 1.2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .carousel-img {
+    height: 250px;
+  }
+  
+  .category-container {
+    margin: 2rem auto;
+    padding: 0 1rem;
+  }
+  
+  .category-title {
+    font-size: 1.5rem;
+  }
+  
+  .category-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .category-name {
+    font-size: 1rem;
+    padding: 1rem 0.5rem 0.5rem;
+  }
+  .carousel {
+    margin: 1rem auto;
+    border-radius: 10px;
+    margin-top: 13%;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .category-title {
+    color: #070c0e;
+  }
+  
+  .category-item {
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .category-item:hover {
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  }
+  
+}

@@ -1,0 +1,268 @@
+/* BuyNow.css */
+
+/* Base Styles */
+.conn {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+  padding: 2rem;
+  color: #2c3e50;
+  margin-top: 2%;
+}
+
+h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #2c3e50;
+  text-align: center;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, #3498db, #9b59b6);
+  border-radius: 2px;
+}
+
+h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  color: #3498db;
+}
+
+/* Layout Styles */
+.roow2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.book1 {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book1:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.roww {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 500px;
+}
+
+.rooww, .cdetai {
+  flex: 1;
+  padding: 2rem;
+  min-width: 300px;
+}
+
+.rooww {
+  background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid #eee;
+}
+
+.cdetai {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Product Details */
+.imggs {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.imggs:hover {
+  transform: scale(1.05);
+}
+
+.pper {
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+  color: #34495e;
+  width: 100%;
+  text-align: center;
+}
+
+.pper strong {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+/* Form Styles */
+.formm {
+  padding: 12px 15px;
+  margin-bottom: 1.5rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.formm:focus {
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  outline: none;
+}
+
+.formm::placeholder {
+  color: #95a5a6;
+}
+
+/* Button Styles */
+.btnn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #3498db 0%, #2ecc71 100%);
+  color: white;
+  margin-top: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btnn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 7px 14px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #2980b9 0%, #27ae60 100%);
+}
+
+.btnn:disabled {
+  background: #95a5a6;
+  transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.book1 {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+  .rooww, .cdetai {
+    padding: 1.5rem;
+  }
+  
+  h2 {
+    font-size: 2.2rem;
+  }
+  
+  h4 {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .conn {
+    padding: 1.5rem;
+  }
+  
+  .roww {
+    flex-direction: column;
+  }
+  
+  .rooww {
+    border-right: none;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 2rem;
+  }
+  
+  .cdetai {
+    padding-top: 2rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .conn {
+    padding: 1rem;
+  }
+  
+  h2 {
+    font-size: 1.8rem;
+    padding-bottom: 0.5rem;
+  }
+  
+  h2::after {
+    width: 80px;
+    height: 3px;
+  }
+  
+  .rooww, .cdetai {
+    padding: 1rem;
+    min-width: 100%;
+  }
+  
+  .formm {
+    padding: 10px 12px;
+    margin-bottom: 1rem;
+  }
+  
+  .btnn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Error Message Styling */
+.text-danger {
+  color: #e74c3c;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+/* Price Highlight */
+.pper:last-child {
+  font-size: 1.3rem;
+  color: #27ae60;
+  font-weight: 700;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px dashed #bdc3c7;
+}

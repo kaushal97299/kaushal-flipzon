@@ -1,0 +1,219 @@
+/* Footer Container Styles */
+.footer5 {
+  background: linear-gradient(135deg, #2c3e50, #4a6491, #2c3e50);
+  color: white;
+  padding: 50px 0 0;
+  position: relative;
+  overflow: hidden;
+  /* margin-top: 9%; */
+}
+
+/* Triple Background Effect */
+.footer5::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #ff6b6b);
+}
+
+.footer5::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ff6b6b, #4ecdc4, #ff6b6b);
+}
+
+.container7 {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Main Footer Content */
+.row12 {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 30px;
+}
+
+.colll, .coll {
+  flex: 1;
+  min-width: 250px;
+  margin-bottom: 30px;
+  padding: 0 15px;
+}
+
+/* Social Media Icons */
+.folw {
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #fff;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.folw::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(90deg, #ff6b6b, #4ecdc4);
+}
+
+.social-iconss {
+  display: flex;
+  gap: 15px;
+}
+
+.social-iconss a {
+  color: #fff;
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.social-iconss a:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.social-iconss a:nth-child(1):hover { background: #3b5998; } /* Facebook */
+.social-iconss a:nth-child(2):hover { background: #1da1f2; } /* Twitter */
+.social-iconss a:nth-child(3):hover { 
+  background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+} /* Instagram */
+.social-iconss a:nth-child(4):hover { background: #0077b5; } /* LinkedIn */
+
+/* Quick Links */
+.list-unstyledd {
+  list-style: none;
+  padding: 0;
+}
+
+.list-unstyledd li {
+  margin-bottom: 10px;
+}
+
+.list-unstyledd a {
+  color: #ddd;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+  padding: 5px 0;
+  position: relative;
+}
+
+.list-unstyledd a::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: #4ecdc4;
+  transition: width 0.3s ease;
+}
+
+.list-unstyledd a:hover {
+  color: #fff;
+  padding-left: 10px;
+}
+
+.list-unstyledd a:hover::before {
+  width: 100%;
+}
+
+/* Company Info */
+.coll p {
+  color: #ddd;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+/* Contact Info */
+.list-unstyled {
+  list-style: none;
+  padding: 0;
+}
+
+.list-unstyled li {
+  margin-bottom: 10px;
+  color: #ddd;
+  display: flex;
+  align-items: center;
+}
+
+.list-unstyled li::before {
+  content: "•";
+  color: #4ecdc4;
+  margin-right: 8px;
+}
+
+/* Footer Bottom */
+.row2 {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 20px 0;
+  text-align: center;
+}
+
+.col2 {
+  width: 100%;
+}
+
+.col2 p {
+  color: #aaa;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .row1 {
+    flex-direction: column;
+  }
+  
+  .colll, .coll {
+    min-width: 100%;
+    margin-bottom: 30px;
+  }
+  
+  .social-iconss {
+    justify-content: center;
+  }
+  
+  .folw {
+    text-align: center;
+  }
+  
+  .folw::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+/* Animation Effects */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0px); }
+}
+
+.social-iconss a:hover {
+  animation: float 1s ease-in-out infinite;
+}

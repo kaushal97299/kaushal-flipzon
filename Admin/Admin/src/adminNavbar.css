@@ -1,0 +1,169 @@
+/* AdminNavbar.css - Dropdown-First with Enhanced Media Queries */
+.admin-navbar {
+  background: #2c3e50 !important;
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Dropdown Menu - Primary Styles */
+.user-dropdown {
+  margin-left: auto;
+  position: relative;
+}
+
+.user-dropdown .dropdown-toggle {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  color: white;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.user-dropdown .dropdown-menu {
+  min-width: 200px;
+  background: #34495e;
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 0.5rem 0;
+  margin-top: 0.5rem;
+  right: 0;
+  left: auto !important;
+}
+
+.user-dropdown .dropdown-item {
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem 1.25rem;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.user-dropdown .dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+/* Media Queries - Responsive Adjustments */
+
+/* Large desktops (1200px and up) */
+@media (min-width: 1200px) {
+  .user-dropdown .dropdown-menu {
+    min-width: 220px;
+  }
+}
+
+/* Tablets (768px to 991.98px) */
+@media (max-width: 991.98px) {
+  .admin-navbar {
+    padding: 0.5rem;
+  }
+  
+  .user-dropdown {
+    order: 3; /* Moves dropdown to bottom in mobile */
+    width: 100%;
+    margin: 0.5rem 0 0 0;
+  }
+  
+  .user-dropdown .dropdown-toggle {
+    width: 100%;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+  }
+  
+  .user-dropdown .dropdown-menu {
+    width: 100%;
+    position: static !important;
+    margin-top: 0.25rem;
+  }
+}
+
+/* Small devices (576px to 767.98px) */
+@media (max-width: 767.98px) {
+  .navbar-brand {
+    font-size: 1.2rem;
+    margin-right: auto;
+  }
+  
+  .nav-link {
+    padding: 0.75rem !important;
+    margin: 0.1rem 0;
+  }
+}
+
+/* Extra small devices (below 576px) */
+@media (max-width: 575.98px) {
+  .admin-navbar {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .user-dropdown .dropdown-toggle {
+    font-size: 0.9rem;
+  }
+  
+  .login-btn {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .nav-icon {
+    margin-right: 0.4rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* Mobile menu toggle specific styles */
+@media (max-width: 991.98px) {
+  .navbar-collapse {
+    padding: 1rem;
+    background: rgba(44, 62, 80, 0.98);
+    margin-top: 0.5rem;
+    border-radius: 4px;
+  }
+  
+  .navbar-toggler {
+    padding: 0.4rem 0.75rem;
+    font-size: 1rem;
+  }
+}
+
+/* Portrait tablet to landscape */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .user-dropdown {
+    margin-left: 0.5rem;
+    width: auto;
+  }
+  
+  .user-dropdown .dropdown-toggle {
+    width: auto;
+  }
+}
+
+/* Landscape phones */
+@media (max-width: 767.98px) and (orientation: landscape) {
+  .admin-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1020;
+  }
+  
+  .navbar-collapse {
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+}
+
+/* Dark mode preference */
+@media (prefers-color-scheme: dark) {
+  .admin-navbar {
+    background: #1a1a2e !important;
+  }
+  
+  .user-dropdown .dropdown-menu {
+    background: #16213e;
+  }
+}

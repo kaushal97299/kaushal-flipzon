@@ -1,0 +1,148 @@
+/* Base Styles */
+.contain12 {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.ttt{
+  margin-top: 3%;
+}
+.sho {
+  font-size: 2rem;
+  color: #343a40;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.cart-items1 {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.cart-image {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+}
+
+.cart-info {
+  flex-grow: 1;
+}
+
+.hed {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #212529;
+  margin-bottom: 8px;
+}
+
+.pri {
+  color: #495057;
+  margin: 5px 0;
+}
+
+.quantity-controls button {
+  padding: 5px 10px;
+  font-size: 1rem;
+}
+
+/* Smaller Remove Button */
+.btn-danger {
+  padding: 3px 6px;
+  font-size: 0.9rem;
+  margin-top: 10px;
+}
+
+/* Price Details Card */
+.card {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 19%;
+  margin-left: 2%;
+}
+
+/* Media Queries */
+@media (max-width: 1200px) {
+  .sho {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 992px) {
+  .cart-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .cart-image {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sho {
+    font-size: 1.5rem;
+  }
+  .btn-danger {
+    padding: 2px 4px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .cart-image {
+    width: 70px;
+    height: 70px;
+  }
+  .hed {
+    font-size: 1rem;
+  }
+  .pri {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .sho {
+    font-size: 1.2rem;
+  }
+  .btn-danger {
+    padding: 1px 3px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .cart-item {
+    padding: 10px;
+  }
+}
+
+@media (max-width: 360px) {
+  .cart-info h5 {
+    font-size: 0.9rem;
+  }
+  .btn-danger {
+    padding: 1px 2px;
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .sho {
+    font-size: 1rem;
+  }
+  .pri, .hed {
+    font-size: 0.8rem;
+  }
+}
