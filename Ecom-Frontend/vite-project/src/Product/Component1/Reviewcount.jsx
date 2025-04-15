@@ -10,6 +10,7 @@ const ProductReviewTable = ({ Id }) => {
 
   useEffect(() => {
     fetchReviews();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [Id]);
 
   const fetchReviews = async () => {
