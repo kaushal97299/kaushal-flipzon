@@ -15,8 +15,7 @@ app.use(express.json());
 app.use(cors());
 app.use("/uploads", express.static("uploads"));
 app.use("/ProfileImage", express.static("ProfileImage"));
-app.use("/uploadsCarou", express.static(path.join(__dirname, "uploadsCarou")));
-
+app.use("/uploadsCarou", express.static("uploadsCarou"));
 
 
 app.use("/api/auth", authRoutes);
