@@ -1,21 +1,19 @@
 const express = require("express");
 const multer = require("multer");
-const fs = require("fs");
-const path = require("path");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../utils/cloudinary"); // your Cloudinary config
 const Product = require("../models/ProductSchema");
 
 const app = express.Router();
 
-// Ensure upload directory exists
-const uploadDir = path.join(__dirname, "../uploads");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-// Multer Storage Setup
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, uploadDir),
-  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
+// ✅ Cloudinary Storage Setup
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "productImages", // Save in this folder on Cloudinary
+    allowed_formats: ["jpg", "png", "jpeg"],
+    public_id: (req, file) => Date.now() + "-" + file.originalname.split(".")[0],
+  },
 });
 
 const upload = multer({ storage });
@@ -27,7 +25,6 @@ app.post("/add", upload.single("image"), async (req, res) => {
 
     const { pname, price, category, description, brand, discount = 0, offerEndDate } = req.body;
 
-    // Input validation
     if (!pname || !price || !category || !description || !brand) {
       return res.status(400).json({ message: "All fields are required except image and discount." });
     }
@@ -44,7 +41,7 @@ app.post("/add", upload.single("image"), async (req, res) => {
       brand,
       discount: parsedDiscount,
       offerEndDate,
-      image: req.file.filename, // Store the image filename
+      image: req.file.path, // ✅ Cloudinary full URL
       finalPrice,
     });
 
@@ -55,7 +52,7 @@ app.post("/add", upload.single("image"), async (req, res) => {
   }
 });
 
-// ✅ Get All Products (GET)
+// ✅ Get All Products
 app.get("/prod", async (req, res) => {
   try {
     const products = await Product.find();
@@ -65,7 +62,7 @@ app.get("/prod", async (req, res) => {
   }
 });
 
-// ✅ Get Single Product by ID (GET)
+// ✅ Get Single Product by ID
 app.get("/prod/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -76,25 +73,20 @@ app.get("/prod/:id", async (req, res) => {
   }
 });
 
-// ✅ Delete Product by ID (DELETE)
+// ✅ Delete Product
 app.delete("/:id", async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    // Delete image file
-    if (product.image) {
-      const imagePath = path.join(uploadDir, product.image);
-      if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
-    }
-
+    // Optional: delete Cloudinary image (requires public_id logic)
     res.json({ message: "Product deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: "Error deleting product", error: err.message });
   }
 });
 
-// ✅ Update Product by ID (PUT)
+// ✅ Update Product
 app.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
@@ -102,14 +94,10 @@ app.put("/:id", upload.single("image"), async (req, res) => {
 
     let updatedData = { ...req.body };
 
-    // If image is uploaded, handle image update
     if (req.file) {
-      const oldImagePath = path.join(uploadDir, product.image);
-      if (fs.existsSync(oldImagePath)) fs.unlinkSync(oldImagePath); // Delete the old image
-      updatedData.image = req.file.filename; // Update to the new image filename
+      updatedData.image = req.file.path; // update Cloudinary URL
     }
 
-    // Ensure final price updates
     const parsedPrice = parseFloat(req.body.price || product.price);
     const parsedDiscount = parseFloat(req.body.discount || product.discount);
     updatedData.finalPrice = parsedPrice - (parsedPrice * parsedDiscount) / 100;
