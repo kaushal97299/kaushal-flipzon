@@ -95,7 +95,7 @@ const ProductManagement = () => {
                 <td>
                   {product.image ? (
                     <Image
-                      src={`https://kaushal-flipzon.onrender.com/uploads/${product.image}`}
+                      src={product.image}
                       alt={product.name}
                       thumbnail
                       width={50}

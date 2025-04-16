@@ -112,7 +112,7 @@ function Orderdet() {
                                         <td>{order.product?.discount}%</td>
                                         <td>
                                             <img
-                                                src={`https://kaushal-flipzon.onrender.com/uploads/${order.product?.image}`}
+                                                src={order.product?.image}
                                                 alt="Product"
                                                 width="60"
                                                 height="60"

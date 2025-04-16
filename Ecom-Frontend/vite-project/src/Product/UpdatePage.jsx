@@ -124,7 +124,7 @@ const UpdateProduct = () => {
           <div className="div4">
             <label className="lb2">Current Image:</label>
             {product.image && (
-              <img src={`https://kaushal-flipzon.onrender.com/uploads/${product.image}`} alt="Product" width="100" />
+              <img src={product.image} alt="Product" width="100" />
             )}
           </div>
 
