@@ -170,7 +170,7 @@ const ProductDetail = () => {
       <div className="product-main-section">
         <div className="product-image-section">
           <img
-            src={`https://kaushal-flipzon.onrender.com/uploads/${product.image}`}
+            src={product.image}
             alt={product.name}
             className="product-image"
           />
