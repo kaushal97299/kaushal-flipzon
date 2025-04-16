@@ -128,7 +128,7 @@ const BuyNow = () => {
                 {product ? (
                   <>
                     <img
-                      src={`https://kaushal-flipzon.onrender.com/uploads/${product.image}`}
+                      src={product.image}
                       alt={product.pname}
                       className="imggs"
                       style={{ maxWidth: "200px" }}
