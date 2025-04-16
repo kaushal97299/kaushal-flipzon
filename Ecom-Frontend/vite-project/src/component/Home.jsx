@@ -209,7 +209,7 @@ const ProductCardList = ({ newProduct }) => {
                   <div className="card4">
                     <Link to={`/product/${product._id}`} state={{ product, user }} className="card-link">
                       <img
-                        src={`https://kaushal-flipzon.onrender.com/uploads/${product.image}`}
+                        src={product.image}
                         alt={product.pname}
                         className="product-img"
                       />
