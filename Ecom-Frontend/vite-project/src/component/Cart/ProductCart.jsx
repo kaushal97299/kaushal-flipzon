@@ -71,7 +71,7 @@ const Cart = () => {
                 {cart.map((item) => (
                   <div key={item._id} className="cart-item d-flex mb-3">
                     <img
-                      src={item.image ? `http://localhost:4000/uploads/${item.image}` : "/image/placeholder.png"}
+                      src={item.image ? `https://kaushal-flipzon.onrender.com/uploads/${item.image}` : "/image/placeholder.png"}
                       alt={item.name}
                       className="cart-image me-3"
                       style={{ width: "100px", height: "100px" }}

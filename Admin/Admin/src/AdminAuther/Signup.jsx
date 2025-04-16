@@ -42,7 +42,7 @@ function AdminSignup() {
     }
 
     try {
-      const response = await axios.post("http://localhost:4000/api/Adminsignup", {
+      const response = await axios.post("https://kaushal-flipzon.onrender.com/api/Adminsignup", {
         name: formData.name,
         email: formData.email,
         password: formData.password,

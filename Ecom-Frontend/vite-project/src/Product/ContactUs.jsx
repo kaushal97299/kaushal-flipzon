@@ -100,7 +100,7 @@ const ContactUs = () => {
     setSubmitStatus(null);
 
     try {
-      const response = await axios.post('http://localhost:4000/api/contact/contactt', {
+      const response = await axios.post('https://kaushal-flipzon.onrender.com/api/contact/contactt', {
         ...formData,
         phone: formData.phone || null,
         orderNumber: formData.subject === 'order' ? formData.orderNumber : null

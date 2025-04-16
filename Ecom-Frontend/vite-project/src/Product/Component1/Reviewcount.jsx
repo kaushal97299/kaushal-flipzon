@@ -27,7 +27,7 @@ function Rewiewproduct() {
     const fetchReviewData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get(`http://localhost:4000/api/reviews/rewss`);
+            const response = await axios.get(`https://kaushal-flipzon.onrender.com/api/reviews/rewss`);
             setReviews(response.data || []);
             setFilteredReviews(response.data || []);
         } catch (error) {
@@ -39,7 +39,7 @@ function Rewiewproduct() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:4000/api/reviews/${id}`);
+            await axios.delete(`https://kaushal-flipzon.onrender.com/api/reviews/${id}`);
             fetchReviewData();
             toast.success('Review deleted successfully');
         } catch (error) {

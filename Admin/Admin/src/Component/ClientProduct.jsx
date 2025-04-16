@@ -29,7 +29,7 @@ function ClientProduct() {
     const fetchProductData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("http://localhost:4000/api/products/prod");
+            const response = await axios.get("https://kaushal-flipzon.onrender.com/api/products/prod");
             console.log("API Response:", response.data);
             setProducts(response.data || []);
             setFilteredProducts(response.data || []);
@@ -42,7 +42,7 @@ function ClientProduct() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:4000/api/products/${id}`);
+            await axios.delete(`https://kaushal-flipzon.onrender.com/api/products/${id}`);
             fetchProductData();
             toast.success('Product deleted successfully');
         } catch (error) {

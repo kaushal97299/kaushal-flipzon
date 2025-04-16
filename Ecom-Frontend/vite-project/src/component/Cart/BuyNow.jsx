@@ -63,7 +63,7 @@ const BuyNow = () => {
     const finalPrice = product.price - (product.price * (product.discount || 0)) / 100;
 
     try {
-      const orderResponse = await axios.post("http://localhost:4000/api/orders/create", {
+      const orderResponse = await axios.post("https://kaushal-flipzon.onrender.com/api/orders/create", {
         amount: finalPrice * 100,
       });
 
@@ -88,7 +88,7 @@ const BuyNow = () => {
           };
 
           try {
-            const verifyResponse = await axios.post("http://localhost:4000/api/orders", paymentData);
+            const verifyResponse = await axios.post("https://kaushal-flipzon.onrender.com/api/orders", paymentData);
             if (verifyResponse.status === 201) {
               toast.success("Order placed successfully! 🎉");
               setTimeout(() => navigate("/"), 2000);
@@ -128,7 +128,7 @@ const BuyNow = () => {
                 {product ? (
                   <>
                     <img
-                      src={`http://localhost:4000/uploads/${product.image}`}
+                      src={`https://kaushal-flipzon.onrender.com/uploads/${product.image}`}
                       alt={product.pname}
                       className="imggs"
                       style={{ maxWidth: "200px" }}
