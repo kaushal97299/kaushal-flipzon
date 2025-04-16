@@ -35,7 +35,7 @@ app.post('/rew',  async (req, res) => {
 app.get('/rew/:id', async (req, res) => {
   const productId = req.params.id;
   try {
-    const reviews = await Review.find({ productId }).populate('userId', 'name email').sort({ createdAt: -1 });
+    const reviews = await Review.find({ productId });
     res.status(200).json(reviews);
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
@@ -49,6 +49,14 @@ app.delete('/:id', async (req, res) => {
       return res.status(404).json({ message: "Review not found" });
     }
     res.status(200).json({ message: "Review deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+app.get('/rewss', async (req, res) => {
+  try {
+    const reviews = await Review.find({}).populate('productId');
+    res.status(200).json(reviews);
   } catch (err) {
     res.status(500).json({ message: "Internal server error" });
   }

@@ -42,7 +42,7 @@ function Signup() {
 
     setIsLoading(true);
     try {
-      const response = await axios.post("https://kaushal-flipzon.onrender.com/api/auth/send-otp", {
+      const response = await axios.post("http://localhost:4000/api/auth/send-otp", {
         email: formData.email,
       });
       
@@ -67,7 +67,7 @@ function Signup() {
 
     setIsLoading(true);
     try {
-      const response = await axios.post("https://kaushal-flipzon.onrender.com/api/auth/verify-otp", {
+      const response = await axios.post("http://localhost:4000/api/auth/verify-otp", {
         email: formData.email,
         enteredOtp: otp,
       });
@@ -106,7 +106,7 @@ function Signup() {
 
     setIsLoading(true);
     try {
-      const response = await axios.post("https://kaushal-flipzon.onrender.com/api/auth/signup", formData);
+      const response = await axios.post("http://localhost:4000/api/auth/signup", formData);
       if (response.status === 201) {
         toast.success("✅ Signup successful!");
         setTimeout(() => navigate("/login"), 1000);

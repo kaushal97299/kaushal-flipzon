@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import "react-toastify/dist/ReactToastify.css";
-import "./BuyNow.css"; // Ensure styles are updated for flex display
+import "./BuyNow.css";
 
 const BuyNow = () => {
   const location = useLocation();
@@ -15,46 +15,15 @@ const BuyNow = () => {
     address: "",
     phone: "",
   });
-  const [userId, setUserId] = useState(null);
+
   const [loading, setLoading] = useState(false);
 
-  // Fetch user ID
-  useEffect(() => {
-    const fetchUserId = async () => {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        toast.error("Please log in to place an order.");
-        return;
-      }
+  const user = JSON.parse(localStorage.getItem("user"));
 
-      try {
-        const response = await axios.get("https://kaushal-flipzon.onrender.com/api/auth/users", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUserId(response.data.userId);
-      } catch (error) {
-        console.error("Failed to fetch user ID:", error);
-      }
-    };
-
-    fetchUserId();
-  }, []);
-
-  // Remove product from the user's cart
-  useEffect(() => {
-    if (!userId || !product) return;
-
-    const savedCart = JSON.parse(localStorage.getItem(`cart_${userId}`)) || [];
-    const updatedCart = savedCart.filter((item) => item._id !== product._id);
-    localStorage.setItem(`cart_${userId}`, JSON.stringify(updatedCart));
-  }, [userId, product]);
-
-  // Handle input changes
   const handleChange = (e) => {
-    setUserDetails({ ...userDetails, [e.target.name]: e.target.value });
+    setUserDetails({ ...userDetails, [e.target.name]: e.target.value.trim() });
   };
 
-  // Validate form inputs
   const validateForm = () => {
     const { name, address, phone } = userDetails;
     const nameRegex = /^[A-Za-z\s]{3,50}$/;
@@ -76,14 +45,7 @@ const BuyNow = () => {
     return true;
   };
 
-  // Handle order submission
   const handleOrderSubmit = async () => {
-    const userId = localStorage.getItem("user");
-    if (!userId) {
-      toast.error("User not logged in. Please log in to proceed.");
-      return;
-    }
-
     if (!product) {
       toast.error("Invalid product. Please try again.");
       return;
@@ -91,36 +53,63 @@ const BuyNow = () => {
 
     if (!validateForm()) return;
 
+    if (!user) {
+      toast.error("You must be logged in to place an order.");
+      return;
+    }
+
     setLoading(true);
 
     const finalPrice = product.price - (product.price * (product.discount || 0)) / 100;
 
-    const orderDetails = {
-      userId,
-      ...userDetails,
-      product: { ...product, finalPrice },
-      orderTime: new Date().toISOString(),
-    };
-
     try {
-      console.log("Sending Order Details:", orderDetails);
-      const response = await fetch("https://kaushal-flipzon.onrender.com/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" ,userId },
-        body: JSON.stringify(orderDetails),
+      const orderResponse = await axios.post("http://localhost:4000/api/orders/create", {
+        amount: finalPrice * 100,
       });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        toast.error(`Order failed: ${errorData.message || "Please try again."}`);
-        return;
-      }
+      const { orderId, amount, currency } = orderResponse.data;
 
-      toast.success("Order placed successfully! 🎉");
-      setTimeout(() => navigate("/"), 2000);
+      const options = {
+        key: "rzp_test_4xjKupfTBgr5M6",
+        amount,
+        currency,
+        name: "My E-Commerce",
+        description: "Order Payment",
+        image: "/logo.png",
+        order_id: orderId,
+        handler: async function (response) {
+          const paymentData = {
+            ...userDetails,
+            userId: user?._id || "guest", // ✅ Include userId here
+            product: { ...product, finalPrice },
+            razorpayPaymentId: response.razorpay_payment_id,
+            razorpayOrderId: response.razorpay_order_id,
+            razorpaySignature: response.razorpay_signature,
+          };
+
+          try {
+            const verifyResponse = await axios.post("http://localhost:4000/api/orders", paymentData);
+            if (verifyResponse.status === 201) {
+              toast.success("Order placed successfully! 🎉");
+              setTimeout(() => navigate("/"), 2000);
+            }
+          } catch (error) {
+            console.error("Verification Error:", error);
+            toast.error("Payment verification failed.");
+          }
+        },
+        prefill: {
+          name: userDetails.name,
+          contact: userDetails.phone,
+        },
+        theme: { color: "#3399cc" },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
     } catch (error) {
-      toast.error("Error placing order. Please try again.");
-      console.error("Order Error:", error);
+      console.error("Razorpay Order Creation Error:", error);
+      toast.error("Failed to initiate payment. Please try again.");
     }
 
     setLoading(false);
@@ -128,9 +117,8 @@ const BuyNow = () => {
 
   return (
     <>
-      <ToastContainer position="top-center" autoClose={3000} hideProgressBar={false} />
-
-      <div className="conn ">
+      <ToastContainer position="top-center" autoClose={3000} />
+      <div className="conn">
         <h2 className="text-center">Buy Now</h2>
         <div className="roow2">
           <div className="book1">
@@ -140,7 +128,7 @@ const BuyNow = () => {
                 {product ? (
                   <>
                     <img
-                      src={`https://kaushal-flipzon.onrender.com/uploads/${product.image}`}
+                      src={`http://localhost:4000/uploads/${product.image}`}
                       alt={product.pname}
                       className="imggs"
                       style={{ maxWidth: "200px" }}

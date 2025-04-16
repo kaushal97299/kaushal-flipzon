@@ -33,7 +33,7 @@ const Favorites = () => {
               <div key={product._id} className="card-container">
                 <Link to={`/product/${product._id}`} className="card-link">
                   <div className="card1">
-                    <img src={`https://kaushal-flipzon.onrender.com/uploads/${product.image}`} alt={product.name} />
+                    <img src={`http://localhost:4000/uploads/${product.image}`} alt={product.name} />
                     <h3 className="hh">{product.name}</h3>
                     <p className="product-price text-success fs-4">
                       ₹{discountedPrice}

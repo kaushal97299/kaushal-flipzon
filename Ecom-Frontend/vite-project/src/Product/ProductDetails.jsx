@@ -23,10 +23,10 @@ const ProductDetail = () => {
     const fetchProductAndReviews = async () => {
       setLoading(true);
       try {
-        const productResponse = await axios.get(`https://kaushal-flipzon.onrender.com/api/products/prod/${id}`);
+        const productResponse = await axios.get(`http://localhost:4000/api/products/prod/${id}`);
         setProduct(productResponse.data);
 
-        const reviewsResponse = await axios.get(`https://kaushal-flipzon.onrender.com/api/reviews/rew/${id}`);
+        const reviewsResponse = await axios.get(`http://localhost:4000/api/reviews/rew/${id}`);
         setReviews(reviewsResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -103,7 +103,7 @@ const ProductDetail = () => {
         ? { headers: { Authorization: `Bearer ${user.token}` } }
         : {};
 
-      const response = await axios.post("https://kaushal-flipzon.onrender.com/api/reviews/rew", reviewData, config);
+      const response = await axios.post("http://localhost:4000/api/reviews/rew", reviewData, config);
       setReviews([response.data, ...reviews]);
       setNewReview("");
       setRating(0);
@@ -130,7 +130,7 @@ const ProductDetail = () => {
         headers: { Authorization: `Bearer ${user.token}` }
       };
 
-      await axios.delete(`https://kaushal-flipzon.onrender.com/api/reviews/${reviewId}`, config);
+      await axios.delete(`http://localhost:4000/api/reviews/${reviewId}`, config);
       setReviews(reviews.filter(review => review._id !== reviewId));
       toast.success("Review deleted successfully!");
     } catch (error) {
@@ -170,7 +170,7 @@ const ProductDetail = () => {
       <div className="product-main-section">
         <div className="product-image-section">
           <img
-            src={`https://kaushal-flipzon.onrender.com/uploads/${product.image}`}
+            src={`http://localhost:4000/uploads/${product.image}`}
             alt={product.name}
             className="product-image"
           />

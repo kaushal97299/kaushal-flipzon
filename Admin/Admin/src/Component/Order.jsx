@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Container, Table, Button, Spinner, Form, FormControl, InputGroup } from 'react-bootstrap';
+import { Container, Table, Button, Spinner, FormControl, InputGroup } from 'react-bootstrap';
 import { FaSearch } from 'react-icons/fa';
 
 function Orderdet() {
@@ -16,11 +16,10 @@ function Orderdet() {
     }, []);
 
     useEffect(() => {
-        // Filter orders whenever searchTerm or orders change
-        const filtered = orders.filter(order => 
-            order.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            order.address.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            order.phone.includes(searchTerm)
+        const filtered = orders.filter(order =>
+            order.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.address?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            order.phone?.includes(searchTerm)
         );
         setFilteredOrders(filtered);
     }, [searchTerm, orders]);
@@ -28,8 +27,7 @@ function Orderdet() {
     const fetchOrderData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("https://kaushal-flipzon.onrender.com/api/orders/Orders");
-            console.log("API Response:", response.data);
+            const response = await axios.get("http://localhost:4000/api/orders/Orders");
             setOrders(response.data || []);
             setFilteredOrders(response.data || []);
         } catch (error) {
@@ -37,11 +35,11 @@ function Orderdet() {
             toast.error('Failed to fetch order data');
         }
         setLoading(false);
-    };  
+    };
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://kaushal-flipzon.onrender.com/api/orders/${id}`);
+            await axios.delete(`http://localhost:4000/api/orders/${id}`);
             fetchOrderData();
             toast.success('Order deleted successfully');
         } catch (error) {
@@ -50,13 +48,18 @@ function Orderdet() {
         }
     };
 
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        return date.toLocaleString(); // Shows both date and time
+    };
+
     return (
         <>
             <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
 
             <Container className="mt-4">
                 <h1 className="text-center mb-4">Order Details</h1>
-                
+
                 {/* Search Bar */}
                 <div className="mb-4">
                     <InputGroup>
@@ -80,10 +83,18 @@ function Orderdet() {
                 ) : (
                     <Table striped bordered hover responsive>
                         <thead className="table-dark">
-                            <tr>
+                            <tr><th>userId</th>
                                 <th>Name</th>
                                 <th>Address</th>
                                 <th>Mobile</th>
+                                <th>productid</th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Discount</th>
+                                <th>Image</th>
+                                <th>Razorpay Order ID</th>
+                                <th>Payment ID</th>
+                                <th>Order Time</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -91,13 +102,30 @@ function Orderdet() {
                             {filteredOrders.length > 0 ? (
                                 filteredOrders.map((order) => (
                                     <tr key={order._id}>
+                                        <td>{order.userId || '-'}</td>
                                         <td>{order.name}</td>
                                         <td>{order.address}</td>
                                         <td>{order.phone}</td>
+                                        <td>{order.product?._id}</td>
+                                        <td>{order.product?.pname}</td>
+                                        <td>₹{order.product?.finalPrice}</td>
+                                        <td>{order.product?.discount}%</td>
                                         <td>
-                                            <Button 
-                                                variant="danger" 
-                                                size="sm" 
+                                            <img
+                                                src={`http://localhost:4000/uploads/${order.product?.image}`}
+                                                alt="Product"
+                                                width="60"
+                                                height="60"
+                                                style={{ objectFit: 'cover', borderRadius: '8px' }}
+                                            />
+                                        </td>
+                                        <td>{order.razorpayOrderId || '-'}</td>
+                                        <td>{order.razorpayPaymentId || '-'}</td>
+                                        <td>{order.orderTime ? formatDate(order.orderTime) : '-'}</td>
+                                        <td>
+                                            <Button
+                                                variant="danger"
+                                                size="sm"
                                                 onClick={() => handleDelete(order._id)}
                                             >
                                                 Delete
@@ -107,7 +135,7 @@ function Orderdet() {
                                 ))
                             ) : (
                                 <tr>
-                                    <td colSpan="4" className="text-center">
+                                    <td colSpan="11" className="text-center">
                                         {searchTerm ? 'No matching orders found' : 'No orders found'}
                                     </td>
                                 </tr>

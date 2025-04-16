@@ -1,39 +1,41 @@
 const express = require("express");
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const { v2: cloudinary } = require("cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const CarouselImage = require("../models/CarouselImage");
 
 const app = express();
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    const dir = "./uploadsCarou";
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-    cb(null, dir);
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + "-" + file.originalname);
+// ✅ Cloudinary config
+cloudinary.config({
+  cloud_name: "djglqucwv",
+  api_key: "188628164289596",
+  api_secret: "fHowoGuNyUzyMzIgTRHPMjCatIY",
+});
+
+// ✅ Cloudinary Storage
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "carousel", // optional folder in your Cloudinary account
+    allowed_formats: ["jpg", "jpeg", "png"],
   },
 });
 
 const upload = multer({ storage });
 
-// ✅ POST: Upload images
+// ✅ Upload endpoint
 app.post("/upload", upload.array("images", 3), async (req, res) => {
   try {
-    console.log("Uploaded files:", req.files);
-    const savedImages = await Promise.all(
-      req.files.map(async (file) => {
-        const newImage = new CarouselImage({
-          imageUrl: `https://kaushal-flipzon.onrender.com/uploadsCarou/${file.filename}`,
-        });
-       
+    const urls = req.files.map((file) => file.path); // Cloudinary URL
 
-        return await newImage.save();
+    const savedImages = await Promise.all(
+      urls.map((url) => {
+        const newImage = new CarouselImage({ imageUrl: url });
+        return newImage.save();
       })
     );
-    const urls = savedImages.map((img) => img.imageUrl);
+
     res.json({ imageUrls: urls });
   } catch (err) {
     console.error("Upload error:", err);
@@ -41,7 +43,7 @@ app.post("/upload", upload.array("images", 3), async (req, res) => {
   }
 });
 
-// ✅ GET: Fetch all carousel images
+// ✅ Get all images
 app.get("/images", async (req, res) => {
   try {
     const images = await CarouselImage.find().sort({ uploadedAt: -1 }).limit(3);

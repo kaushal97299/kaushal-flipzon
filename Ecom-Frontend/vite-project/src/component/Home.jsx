@@ -21,7 +21,7 @@ const ProductCardList = ({ newProduct }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("https://kaushal-flipzon.onrender.com/api/products/prod");
+        const response = await axios.get("http://localhost:4000/api/products/prod");
         setProducts(response.data);
         setFilteredProducts(response.data);
         fetchAllProductRatings(response.data);
@@ -36,7 +36,7 @@ const ProductCardList = ({ newProduct }) => {
     const ratings = {};
     try {
       for (const product of products) {
-        const response = await axios.get(`https://kaushal-flipzon.onrender.com/api/reviews/rew/${product._id}`);
+        const response = await axios.get(`http://localhost:4000/api/reviews/rew/${product._id}`);
         const reviews = response.data;
         if (reviews.length > 0) {
           const total = reviews.reduce((sum, review) => sum + review.rating, 0);
@@ -60,7 +60,7 @@ const ProductCardList = ({ newProduct }) => {
 
   const fetchProductRating = async (productId) => {
     try {
-      const response = await axios.get(`https://kaushal-flipzon.onrender.com/api/reviews/rew/${productId}`);
+      const response = await axios.get(`http://localhost:4000/api/reviews/rew/${productId}`);
       const reviews = response.data;
       const total = reviews.reduce((sum, review) => sum + review.rating, 0);
       const average = (total / reviews.length).toFixed(1);
@@ -209,7 +209,7 @@ const ProductCardList = ({ newProduct }) => {
                   <div className="card4">
                     <Link to={`/product/${product._id}`} state={{ product, user }} className="card-link">
                       <img
-                        src={`https://kaushal-flipzon.onrender.com/uploads/${product.image}`}
+                        src={`http://localhost:4000/uploads/${product.image}`}
                         alt={product.pname}
                         className="product-img"
                       />

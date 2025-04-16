@@ -32,7 +32,7 @@ function Login() {
     }
 
     try {
-      const response = await axios.post("https://kaushal-flipzon.onrender.com/api/auth/login", loginData);
+      const response = await axios.post("http://localhost:4000/api/auth/login", loginData);
 
       // Extract token & user data from response
       const { token, user } = response.data;

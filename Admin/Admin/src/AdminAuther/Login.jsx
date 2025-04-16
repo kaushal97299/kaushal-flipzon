@@ -31,7 +31,7 @@ function AdminLogin() {
       return;
     }
     try {
-      const response = await axios.post("https://kaushal-flipzon.onrender.com/api/Adminsignup/Adminlogin", loginData);
+      const response = await axios.post("http://localhost:4000/api/Adminsignup/Adminlogin", loginData);
 
       // Extract token & user data from response
       const { token, user } = response.data;

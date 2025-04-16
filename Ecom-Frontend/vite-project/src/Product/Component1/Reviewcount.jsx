@@ -1,101 +1,127 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, Button, Spinner, Container } from 'react-bootstrap';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Container, Table, Button, Spinner, Form, InputGroup } from 'react-bootstrap';
+import { FaSearch } from 'react-icons/fa';
 
-const ProductReviewTable = ({ Id }) => {
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(false);
+function Rewiewproduct() {
+    const [reviews, setReviews] = useState([]);
+    const [filteredReviews, setFilteredReviews] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    fetchReviews();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Id]);
+    useEffect(() => {
+        fetchReviewData();
+    }, []);
 
-  const fetchReviews = async () => {
-    if (!Id) return;
-    setLoading(true);
-    try {
-      const res = await axios.get(`https://kaushal-flipzon.onrender.com/api/reviews/rew/${Id}`);
-      setReviews(res.data);
-    } catch (error) {
-      toast.error('Failed to load reviews');
-      console.error('Error:', error.response?.data || error.message);
-    }
-    setLoading(false);
-  };
+    useEffect(() => {
+        const filtered = reviews.filter(review =>
+            review.userName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            review.text?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            review.rating?.toString().includes(searchTerm)
+        );
+        setFilteredReviews(filtered);
+    }, [searchTerm, reviews]);
 
-  const handleDelete = async (reviewId) => {
-    try {
-      await axios.delete(`https://kaushal-flipzon.onrender.com/api/reviews/rew/${reviewId}`);
-      toast.success('Review deleted');
-      fetchReviews();
-    } catch (error) {
-      toast.error('Failed to delete review');
-      console.error('Error:', error.response?.data || error.message);
-    }
-  };
+    const fetchReviewData = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get(`http://localhost:4000/api/reviews/rewss`);
+            setReviews(response.data || []);
+            setFilteredReviews(response.data || []);
+        } catch (error) {
+            console.error('Error fetching review data:', error.response?.data || error.message);
+            toast.error('Failed to fetch review data');
+        }
+        setLoading(false);
+    };
 
-  return (
-    <Container className="mt-4">
-      <ToastContainer position="top-right" autoClose={3000} />
-      <h2 className="mb-4 text-center">Product Reviews</h2>
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`http://localhost:4000/api/reviews/${id}`);
+            fetchReviewData();
+            toast.success('Review deleted successfully');
+        } catch (error) {
+            console.error('Error deleting review:', error.response?.data || error.message);
+            toast.error('Failed to delete review');
+        }
+    };
 
-      {loading ? (
-        <div className="text-center">
-          <Spinner animation="border" variant="primary" />
-        </div>
-      ) : (
-        <Table striped bordered hover responsive>
-          <thead className="table-dark">
-            <tr>
-              <th>User</th>
-              <th>Rating</th>
-              <th>Review</th>
-              <th>Created At</th>
-              <th>Product ID</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {reviews.length > 0 ? (
-              reviews.map((review) => {
-                const userName = review.userId?.name || review.userName || 'Unknown';
-                const createdAt = new Date(review.createdAt).toLocaleString();
-                const productId = review.productId || 'N/A';  // Assuming `productId` is passed directly
+    const formatDate = (dateStr) => {
+        const date = new Date(dateStr);
+        return date.toLocaleString();
+    };
 
-                return (
-                  <tr key={review._id}>
-                    <td>{userName}</td>
-                    <td>{review.rating}</td>
-                    <td>{review.text}</td>
-                    <td>{createdAt}</td>
-                    <td>{productId}</td>
-                    <td>
-                      <Button
-                        variant="danger"
-                        size="sm"
-                        onClick={() => handleDelete(review._id)}
-                      >
-                        Delete
-                      </Button>
-                    </td>
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan="7" className="text-center">
-                  No reviews found
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </Table>
-      )}
-    </Container>
-  );
-};
+    return (
+        <>
+            <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
 
-export default ProductReviewTable;
+            <Container className="mt-4">
+                <h1 className="text-center mb-4">Product Reviews</h1>
+
+                {/* Search Bar */}
+                <div className="mb-4">
+                    <InputGroup>
+                        <Form.Control
+                            placeholder="Search by username, review text, or rating..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <Button variant="outline-secondary">
+                            <FaSearch />
+                        </Button>
+                    </InputGroup>
+                </div>
+
+                {loading ? (
+                    <div className="text-center">
+                        <Spinner animation="border" variant="primary" />
+                        <p>Loading reviews...</p>
+                    </div>
+                ) : (
+                    <Table striped bordered hover responsive>
+                        <thead className="table-dark">
+                            <tr>
+                                <th>User Name</th>
+                                <th>Rating</th>
+                                <th>Review</th>
+                                <th>Submitted On</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredReviews.length > 0 ? (
+                                filteredReviews.map((review) => (
+                                    <tr key={review._id}>
+                                        <td>{review.userName}</td>
+                                        <td>{review.rating} ★</td>
+                                        <td>{review.text}</td>
+                                        <td>{formatDate(review.createdAt)}</td>
+                                        <td>
+                                            <Button
+                                                variant="danger"
+                                                size="sm"
+                                                onClick={() => handleDelete(review._id)}
+                                            >
+                                                Delete
+                                            </Button>
+                                        </td>
+                                    </tr>
+                                ))
+                            ) : (
+                                <tr>
+                                    <td colSpan="5" className="text-center">
+                                        {searchTerm ? 'No matching reviews found' : 'No reviews found'}
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </Table>
+                )}
+            </Container>
+        </>
+    );
+}
+
+export default Rewiewproduct;
