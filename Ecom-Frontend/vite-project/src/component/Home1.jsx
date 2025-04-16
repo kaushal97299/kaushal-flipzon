@@ -33,7 +33,7 @@ const Home1 = () => {
 
         products.forEach((product) => {
           if (!categoryMap.has(product.category)) {
-            categoryMap.set(product.category, product.image);
+            categoryMap.set(product.category, product.image); // ✅ Cloudinary full URL
           }
         });
 
@@ -103,7 +103,7 @@ const Home1 = () => {
                 onClick={() => navigate(`/ProductCardList`)}
               >
                 <img
-                  src={`https://kaushal-flipzon.onrender.com/uploads/${image}`}
+                  src={image} // ✅ Use Cloudinary full URL directly
                   alt={category}
                   className="category-img"
                 />

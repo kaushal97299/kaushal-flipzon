@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const cloudinary = require("../utils/cloudinary"); // your Cloudinary config
+const cloudinary = require("../utils/cloudinary"); // Cloudinary config
 const Product = require("../models/ProductSchema");
 
 const app = express.Router();
@@ -10,15 +10,16 @@ const app = express.Router();
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "productImages", // Save in this folder on Cloudinary
+    folder: "uploads", // Folder in Cloudinary
     allowed_formats: ["jpg", "png", "jpeg"],
-    public_id: (req, file) => Date.now() + "-" + file.originalname.split(".")[0],
+    public_id: (req, file) =>
+      Date.now() + "-" + file.originalname.split(".")[0],
   },
 });
 
 const upload = multer({ storage });
 
-// ✅ Add Product (POST)
+// ✅ Add Product
 app.post("/add", upload.single("image"), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: "Image is required" });
@@ -33,6 +34,9 @@ app.post("/add", upload.single("image"), async (req, res) => {
     const parsedDiscount = parseFloat(discount);
     const finalPrice = parsedPrice - (parsedPrice * parsedDiscount) / 100;
 
+    const imageUrl = req.file.path;
+    console.log("✅ Cloudinary Image URL:", imageUrl); // For frontend usage
+
     const newProduct = new Product({
       pname,
       price: parsedPrice,
@@ -41,7 +45,7 @@ app.post("/add", upload.single("image"), async (req, res) => {
       brand,
       discount: parsedDiscount,
       offerEndDate,
-      image: req.file.path, // ✅ Cloudinary full URL
+      image: imageUrl, // ✅ Store public URL
       finalPrice,
     });
 
@@ -79,7 +83,7 @@ app.delete("/:id", async (req, res) => {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product) return res.status(404).json({ message: "Product not found" });
 
-    // Optional: delete Cloudinary image (requires public_id logic)
+    // TODO: Optionally delete Cloudinary image via public_id if stored
     res.json({ message: "Product deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: "Error deleting product", error: err.message });
@@ -94,8 +98,10 @@ app.put("/:id", upload.single("image"), async (req, res) => {
 
     let updatedData = { ...req.body };
 
+    // Update image if uploaded
     if (req.file) {
-      updatedData.image = req.file.path; // update Cloudinary URL
+      updatedData.image = req.file.path; // ✅ Cloudinary URL
+      console.log("🆕 Updated Cloudinary Image:", updatedData.image);
     }
 
     const parsedPrice = parseFloat(req.body.price || product.price);
