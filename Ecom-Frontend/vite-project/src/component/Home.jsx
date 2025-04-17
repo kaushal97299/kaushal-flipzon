@@ -106,6 +106,7 @@ const ProductCardList = ({ newProduct }) => {
 
     setFilteredProducts(updatedProducts);
     setCurrentPage(1);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, selectedCategory, searchQuery]);
 
   useEffect(() => {
@@ -113,6 +114,7 @@ const ProductCardList = ({ newProduct }) => {
     if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredProducts, currentPage]);
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
