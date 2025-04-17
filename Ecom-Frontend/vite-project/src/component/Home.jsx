@@ -18,6 +18,20 @@ const ProductCardList = ({ newProduct }) => {
   const searchParams = new URLSearchParams(location.search);
   const searchQuery = searchParams.get("search")?.toLowerCase() || "";
 
+  const categoryMap = {
+    Electronics: ["Electronics", "Mobile", "Earphones"],
+    Fashion: ["Fashion"],
+    "Beauty & Personal Care": ["Beauty & Personal Care"],
+    "Home & Living": ["Home & Living"],
+    "Toys & Games": ["Toys & Games"],
+    "Sports & Outdoors": ["Sports & Outdoors"],
+    "Food & Beverages": ["Food & Beverages"],
+    "Books, Movies & Music": ["Books, Movies & Music"],
+    "Health & Fitness": ["Health & Fitness"],
+    "Office Supplies": ["Office Supplies"],
+    Technology: ["Technology"]
+  };
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -78,10 +92,10 @@ const ProductCardList = ({ newProduct }) => {
     let updatedProducts = products;
 
     if (selectedCategory !== "All") {
-      const [main, sub] = selectedCategory.split(" > ");
-      updatedProducts = updatedProducts.filter((product) => {
-        return product.category === main && (sub ? product.subcategory === sub : true);
-      });
+      const allSelectedCats = categoryMap[selectedCategory] || [selectedCategory];
+      updatedProducts = updatedProducts.filter((product) =>
+        allSelectedCats.includes(product.category)
+      );
     }
 
     if (searchQuery) {
@@ -100,14 +114,6 @@ const ProductCardList = ({ newProduct }) => {
       setCurrentPage(totalPages);
     }
   }, [filteredProducts, currentPage]);
-
-  const categoryTree = {};
-  products.forEach((product) => {
-    const category = product.category || "Uncategorized";
-    const subcategory = product.subcategory || "All";
-    if (!categoryTree[category]) categoryTree[category] = new Set();
-    categoryTree[category].add(subcategory);
-  });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     const priceA = a.finalPrice ?? a.price;
@@ -159,32 +165,39 @@ const ProductCardList = ({ newProduct }) => {
           <ul className="list1">
             <li
               className={`list-group-item ${selectedCategory === "All" ? "active" : ""}`}
-              onClick={() => {
-                setSelectedCategory("All");
-                setCurrentPage(1);
-              }}
+              onClick={() => setSelectedCategory("All")}
               style={{ cursor: "pointer" }}
             >
               All
             </li>
-
-            {Object.entries(categoryTree).map(([mainCat, subCats]) => (
+            {Object.keys(categoryMap).map((mainCat) => (
               <li key={mainCat}>
-                <strong>{mainCat}</strong>
-                <ul className="subcat-list">
-                  {[...subCats].map((sub) => (
-                    <li
-                      key={sub}
-                      className={`list-group-item ${selectedCategory === `${mainCat} > ${sub}` ? "active" : ""}`}
-                      onClick={() => {
-                        setSelectedCategory(`${mainCat} > ${sub}`);
-                        setCurrentPage(1);
-                      }}
-                      style={{ cursor: "pointer", marginLeft: "10px" }}
-                    >
-                      {sub}
-                    </li>
-                  ))}
+                <strong
+                  onClick={() => setSelectedCategory(mainCat)}
+                  style={{
+                    cursor: "pointer",
+                    display: "block",
+                    padding: "5px 0",
+                    color: selectedCategory === mainCat ? "#0d6efd" : "#333",
+                  }}
+                >
+                  {mainCat}
+                </strong>
+                <ul className="subcategory-list" style={{ paddingLeft: "15px" }}>
+                  {categoryMap[mainCat].map((sub) =>
+                    sub !== mainCat ? (
+                      <li
+                        key={sub}
+                        onClick={() => setSelectedCategory(sub)}
+                        className={`subcategory-item ${
+                          selectedCategory === sub ? "active" : ""
+                        }`}
+                        style={{ cursor: "pointer", color: selectedCategory === sub ? "#0d6efd" : "#555" }}
+                      >
+                        {sub}
+                      </li>
+                    ) : null
+                  )}
                 </ul>
               </li>
             ))}
@@ -206,20 +219,6 @@ const ProductCardList = ({ newProduct }) => {
               <option value="highToLow">Price: High to Low</option>
             </select>
           </div>
-
-          {(searchQuery || selectedCategory !== "All") && (
-            <button
-              className="btn btn-outline-secondary mb-3"
-              onClick={() => {
-                setSelectedCategory("All");
-                setCurrentPage(1);
-                setFilteredProducts(products);
-                window.history.replaceState({}, "", "/ProductCardList");
-              }}
-            >
-              Clear Filters
-            </button>
-          )}
 
           <div className="row1">
             {currentProducts.map((product) => {
