@@ -23,6 +23,7 @@ const ProductCardList = ({ newProduct }) => {
       try {
         const response = await axios.get("https://kaushal-flipzon.onrender.com/api/products/prod");
         setProducts(response.data);
+        setFilteredProducts(response.data);
         fetchAllProductRatings(response.data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -74,54 +75,47 @@ const ProductCardList = ({ newProduct }) => {
   }, [favorites]);
 
   useEffect(() => {
-    const applyFilters = () => {
-      let updated = [...products];
+    let updatedProducts = products;
 
-      if (selectedCategory !== "All") {
-        updated = updated.filter(product => product.category === selectedCategory);
-      }
+    if (selectedCategory !== "All") {
+      const [main, sub] = selectedCategory.split(" > ");
+      updatedProducts = updatedProducts.filter((product) => {
+        return product.category === main && (sub ? product.subcategory === sub : true);
+      });
+    }
 
-      if (searchQuery) {
-        updated = updated.filter(product =>
-          product.pname.toLowerCase().includes(searchQuery)
-        );
-      }
+    if (searchQuery) {
+      updatedProducts = updatedProducts.filter((product) =>
+        product.pname.toLowerCase().includes(searchQuery)
+      );
+    }
 
-      if (sortOrder) {
-        updated.sort((a, b) => {
-          const priceA = a.finalPrice ?? a.price;
-          const priceB = b.finalPrice ?? b.price;
-          return sortOrder === "lowToHigh" ? priceA - priceB : priceB - priceA;
-        });
-      }
-
-      setFilteredProducts(updated);
-      setCurrentPage(1);
-    };
-
-    applyFilters();
-  }, [products, selectedCategory, searchQuery, sortOrder]);
+    setFilteredProducts(updatedProducts);
+    setCurrentPage(1);
+  }, [products, selectedCategory, searchQuery]);
 
   useEffect(() => {
-    const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+    const totalPages = Math.ceil(sortedProducts.length / productsPerPage);
     if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(totalPages);
     }
   }, [filteredProducts, currentPage]);
 
-  const handleClearFilters = () => {
-    setSelectedCategory("All");
-    setSortOrder("");
-    setFilteredProducts(products);
-    setCurrentPage(1);
-    window.history.replaceState({}, "", "/ProductCardList");
-  };
+  const categoryTree = {};
+  products.forEach((product) => {
+    const category = product.category || "Uncategorized";
+    const subcategory = product.subcategory || "All";
+    if (!categoryTree[category]) categoryTree[category] = new Set();
+    categoryTree[category].add(subcategory);
+  });
 
-  const categories = ["All", ...new Set(products.map((product) => product.category))];
-
-  const indexOfLastProduct = currentPage * productsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    const priceA = a.finalPrice ?? a.price;
+    const priceB = b.finalPrice ?? b.price;
+    if (sortOrder === "lowToHigh") return priceA - priceB;
+    if (sortOrder === "highToLow") return priceB - priceA;
+    return 0;
+  });
 
   const toggleFavorite = (product) => {
     setFavorites((prev) => {
@@ -152,6 +146,9 @@ const ProductCardList = ({ newProduct }) => {
     );
   };
 
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = sortedProducts.slice(indexOfFirstProduct, indexOfLastProduct);
   const user = JSON.parse(localStorage.getItem("user"));
 
   return (
@@ -160,14 +157,35 @@ const ProductCardList = ({ newProduct }) => {
         <div className="col-md-2 cat">
           <h4 className="categ">Categories</h4>
           <ul className="list1">
-            {categories.map((category) => (
-              <li
-                key={category}
-                className={`list-group-item ${selectedCategory === category ? "active" : ""}`}
-                onClick={() => setSelectedCategory(category)}
-                style={{ cursor: "pointer" }}
-              >
-                {category}
+            <li
+              className={`list-group-item ${selectedCategory === "All" ? "active" : ""}`}
+              onClick={() => {
+                setSelectedCategory("All");
+                setCurrentPage(1);
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              All
+            </li>
+
+            {Object.entries(categoryTree).map(([mainCat, subCats]) => (
+              <li key={mainCat}>
+                <strong>{mainCat}</strong>
+                <ul className="subcat-list">
+                  {[...subCats].map((sub) => (
+                    <li
+                      key={sub}
+                      className={`list-group-item ${selectedCategory === `${mainCat} > ${sub}` ? "active" : ""}`}
+                      onClick={() => {
+                        setSelectedCategory(`${mainCat} > ${sub}`);
+                        setCurrentPage(1);
+                      }}
+                      style={{ cursor: "pointer", marginLeft: "10px" }}
+                    >
+                      {sub}
+                    </li>
+                  ))}
+                </ul>
               </li>
             ))}
           </ul>
@@ -192,62 +210,63 @@ const ProductCardList = ({ newProduct }) => {
           {(searchQuery || selectedCategory !== "All") && (
             <button
               className="btn btn-outline-secondary mb-3"
-              onClick={handleClearFilters}
+              onClick={() => {
+                setSelectedCategory("All");
+                setCurrentPage(1);
+                setFilteredProducts(products);
+                window.history.replaceState({}, "", "/ProductCardList");
+              }}
             >
               Clear Filters
             </button>
           )}
 
           <div className="row1">
-            {currentProducts.length > 0 ? (
-              currentProducts.map((product) => {
-                const discountedPrice = product.finalPrice ?? product.price;
-                const rating = productRatings[product._id] || 0;
+            {currentProducts.map((product) => {
+              const discountedPrice = product.finalPrice ?? product.price;
+              const rating = productRatings[product._id] || 0;
 
-                return (
-                  <div key={product._id} className="claup">
-                    <div className="card4">
-                      <Link to={`/product/${product._id}`} state={{ product, user }} className="card-link">
-                        <img
-                          src={product.image}
-                          alt={product.pname}
-                          className="product-img"
-                        />
-                      </Link>
-                      <div className="carbody">
-                        <h5 className="carditle" title={product.pname}>{product.pname}</h5>
-                        <div className="product-rating">{renderStars(rating)}</div>
-                        <p className="cardext">
-                          <span className="text-success fs-5">₹{discountedPrice}</span>
-                          {product.discount > 0 && (
-                            <span className="text-danger ms-2 fs-6">
-                              <del>₹{product.price}</del> {product.discount}% OFF
-                            </span>
-                          )}
-                        </p>
-                        <p className="muted">Category: {product.category}</p>
-                        <button className="favorite-btn" onClick={() => toggleFavorite(product)}>
-                          {favorites[product._id] ? (
-                            <FaHeart className="favorite-icon active" />
-                          ) : (
-                            <FaRegHeart className="favorite-icon" />
-                          )}
-                        </button>
-                      </div>
+              return (
+                <div key={product._id} className="claup">
+                  <div className="card4">
+                    <Link to={`/product/${product._id}`} state={{ product, user }} className="card-link">
+                      <img
+                        src={product.image}
+                        alt={product.pname}
+                        className="product-img"
+                      />
+                    </Link>
+                    <div className="carbody">
+                      <h5 className="carditle" title={product.pname}>{product.pname}</h5>
+                      <div className="product-rating">{renderStars(rating)}</div>
+                      <p className="cardext">
+                        <span className="text-success fs-5">₹{discountedPrice}</span>
+                        {product.discount > 0 && (
+                          <span className="text-danger ms-2 fs-6">
+                            <del>₹{product.price}</del> {product.discount}% OFF
+                          </span>
+                        )}
+                      </p>
+                      <p className="muted">Category: {product.category}</p>
+                      <button className="favorite-btn" onClick={() => toggleFavorite(product)}>
+                        {favorites[product._id] ? (
+                          <FaHeart className="favorite-icon active" />
+                        ) : (
+                          <FaRegHeart className="favorite-icon" />
+                        )}
+                      </button>
                     </div>
                   </div>
-                );
-              })
-            ) : (
-              <p className="text-center text-danger">No products found in this category.</p>
-            )}
+                </div>
+              );
+            })}
           </div>
 
           <div className="pagina">
             <button onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
               Previous
             </button>
-            {[...Array(Math.ceil(filteredProducts.length / productsPerPage))].map((_, index) => (
+            {[...Array(Math.ceil(sortedProducts.length / productsPerPage))].map((_, index) => (
               <button
                 key={index}
                 className={currentPage === index + 1 ? "active-page" : ""}
@@ -258,11 +277,15 @@ const ProductCardList = ({ newProduct }) => {
             ))}
             <button
               onClick={() => setCurrentPage(currentPage + 1)}
-              disabled={currentPage === Math.ceil(filteredProducts.length / productsPerPage)}
+              disabled={currentPage === Math.ceil(sortedProducts.length / productsPerPage)}
             >
               Next
             </button>
           </div>
+
+          {currentProducts.length === 0 && (
+            <p className="text-center text-danger">No products found in this category.</p>
+          )}
         </div>
       </div>
     </div>
