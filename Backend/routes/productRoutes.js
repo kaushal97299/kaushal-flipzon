@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const cloudinary = require("../utils/cloudinary"); // Cloudinary config
+const cloudinary = require("../utils/cloudinary");
 const Product = require("../models/ProductSchema");
 
 const app = express.Router();
@@ -10,7 +10,7 @@ const app = express.Router();
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: "uploads", // Folder in Cloudinary
+    folder: "uploads",
     allowed_formats: ["jpg", "png", "jpeg"],
     public_id: (req, file) =>
       Date.now() + "-" + file.originalname.split(".")[0],
@@ -19,15 +19,34 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage });
 
-// ✅ Add Product
+// ✅ Add Product (with subcategory)
 app.post("/add", upload.single("image"), async (req, res) => {
   try {
-    if (!req.file) return res.status(400).json({ message: "Image is required" });
+    if (!req.file)
+      return res.status(400).json({ message: "Image is required" });
 
-    const { pname, price, category, description, brand, discount = 0, offerEndDate } = req.body;
+    const {
+      pname,
+      price,
+      category,
+      subcategory,
+      description,
+      brand,
+      discount = 0,
+      offerEndDate,
+    } = req.body;
 
-    if (!pname || !price || !category || !description || !brand) {
-      return res.status(400).json({ message: "All fields are required except image and discount." });
+    if (
+      !pname ||
+      !price ||
+      !category ||
+      !subcategory ||
+      !description ||
+      !brand
+    ) {
+      return res
+        .status(400)
+        .json({ message: "All fields are required including subcategory." });
     }
 
     const parsedPrice = parseFloat(price);
@@ -35,24 +54,28 @@ app.post("/add", upload.single("image"), async (req, res) => {
     const finalPrice = parsedPrice - (parsedPrice * parsedDiscount) / 100;
 
     const imageUrl = req.file.path;
-    console.log("✅ Cloudinary Image URL:", imageUrl); // For frontend usage
 
     const newProduct = new Product({
       pname,
       price: parsedPrice,
       category,
+      subcategory,
       description,
       brand,
       discount: parsedDiscount,
       offerEndDate,
-      image: imageUrl, // ✅ Store public URL
+      image: imageUrl,
       finalPrice,
     });
 
     await newProduct.save();
-    res.status(201).json({ message: "Product added successfully", product: newProduct });
+    res
+      .status(201)
+      .json({ message: "Product added successfully", product: newProduct });
   } catch (error) {
-    res.status(500).json({ message: "Error adding product", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error adding product", error: error.message });
   }
 });
 
@@ -62,7 +85,9 @@ app.get("/prod", async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching products", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching products", error: error.message });
   }
 });
 
@@ -70,10 +95,13 @@ app.get("/prod", async (req, res) => {
 app.get("/prod/:id", async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: "Product not found" });
+    if (!product)
+      return res.status(404).json({ message: "Product not found" });
     res.json(product);
   } catch (error) {
-    res.status(500).json({ message: "Error fetching product", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching product", error: error.message });
   }
 });
 
@@ -81,37 +109,47 @@ app.get("/prod/:id", async (req, res) => {
 app.delete("/:id", async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
-    if (!product) return res.status(404).json({ message: "Product not found" });
+    if (!product)
+      return res.status(404).json({ message: "Product not found" });
 
-    // TODO: Optionally delete Cloudinary image via public_id if stored
+    // TODO: Optionally delete Cloudinary image via public_id
     res.json({ message: "Product deleted successfully" });
   } catch (err) {
-    res.status(500).json({ message: "Error deleting product", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error deleting product", error: err.message });
   }
 });
 
-// ✅ Update Product
+// ✅ Update Product (with subcategory)
 app.put("/:id", upload.single("image"), async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
-    if (!product) return res.status(404).json({ message: "Product not found" });
+    if (!product)
+      return res.status(404).json({ message: "Product not found" });
 
     let updatedData = { ...req.body };
 
-    // Update image if uploaded
     if (req.file) {
-      updatedData.image = req.file.path; // ✅ Cloudinary URL
-      console.log("🆕 Updated Cloudinary Image:", updatedData.image);
+      updatedData.image = req.file.path;
     }
 
     const parsedPrice = parseFloat(req.body.price || product.price);
     const parsedDiscount = parseFloat(req.body.discount || product.discount);
-    updatedData.finalPrice = parsedPrice - (parsedPrice * parsedDiscount) / 100;
+    updatedData.finalPrice =
+      parsedPrice - (parsedPrice * parsedDiscount) / 100;
 
-    const updatedProduct = await Product.findByIdAndUpdate(req.params.id, updatedData, { new: true });
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      updatedData,
+      { new: true }
+    );
+
     res.json(updatedProduct);
   } catch (error) {
-    res.status(500).json({ message: "Error updating product", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error updating product", error: error.message });
   }
 });
 
