@@ -4,21 +4,22 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./AddProduct.css";
 
-const categories = [
-  "Electronics",
-  "Fashion",
-  "Beauty & Personal Care",
-  "Home & Living",
-  "Toys & Games",
-  "Sports & Outdoors",
-  "Food & Beverages",
-  "Books, Movies & Music",
-  "Health & Fitness",
-  "Office Supplies",
-  "Technology",
-  "Mobile",        
-  "Earphones",     
-];
+// Categories with Subcategories
+const categoryOptions = {
+  Electronics: ["Laptops", "Cameras", "Televisions", "Accessories"],
+  Fashion: ["Men", "Women", "Kids"],
+  "Beauty & Personal Care": ["Makeup", "Skincare", "Hair Care"],
+  "Home & Living": ["Furniture", "Decor", "Kitchen"],
+  "Toys & Games": ["Action Figures", "Board Games"],
+  "Sports & Outdoors": ["Fitness Equipment", "Outdoor Gear"],
+  "Food & Beverages": ["Snacks", "Beverages"],
+  "Books, Movies & Music": ["Books", "Movies", "Music"],
+  "Health & Fitness": ["Supplements", "Yoga", "Medical Devices"],
+  "Office Supplies": ["Stationery", "Printers", "Chairs"],
+  Technology: ["Smart Home", "Wearables"],
+  Mobile: ["Smartphones", "Tablets"],
+  Earphones: ["Wired", "Wireless"],
+};
 
 const ProductForm = () => {
   const [formData, setFormData] = useState({
@@ -32,14 +33,20 @@ const ProductForm = () => {
     image: null,
   });
 
+  const [subcategory, setSubcategory] = useState("");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleChange = (e) => {
-    if (e.target.name === "image") {
-      setFormData({ ...formData, image: e.target.files[0] });
+    const { name, value, files } = e.target;
+
+    if (name === "image") {
+      setFormData({ ...formData, image: files[0] });
+    } else if (name === "category") {
+      setFormData({ ...formData, category: value });
+      setSubcategory(""); // Reset subcategory when category changes
     } else {
-      setFormData({ ...formData, [e.target.name]: e.target.value });
+      setFormData({ ...formData, [name]: value });
     }
   };
 
@@ -57,10 +64,16 @@ const ProductForm = () => {
       return;
     }
 
+    if (!subcategory) {
+      toast.error("Please select a subcategory!");
+      return;
+    }
+
     const data = new FormData();
     data.append("pname", formData.pname);
     data.append("price", formData.price);
     data.append("category", formData.category);
+    data.append("subcategory", subcategory);
     data.append("description", formData.description);
     data.append("brand", formData.brand);
     data.append("discount", formData.discount);
@@ -69,9 +82,13 @@ const ProductForm = () => {
 
     try {
       setLoading(true);
-      const response = await axios.post("https://kaushal-flipzon.onrender.com/api/products/add", data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        "https://kaushal-flipzon.onrender.com/api/products/add",
+        data,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       toast.success(response.data.message || "Product added successfully!");
 
@@ -85,6 +102,7 @@ const ProductForm = () => {
         offerEndDate: "",
         image: null,
       });
+      setSubcategory("");
 
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
@@ -137,12 +155,29 @@ const ProductForm = () => {
           required
         >
           <option value="" disabled>Select Category</option>
-          {categories.map((cat, index) => (
+          {Object.keys(categoryOptions).map((cat, index) => (
             <option key={index} value={cat}>
               {cat}
             </option>
           ))}
         </select>
+
+        {formData.category && (
+          <select
+            className="inpp"
+            name="subcategory"
+            value={subcategory}
+            onChange={(e) => setSubcategory(e.target.value)}
+            required
+          >
+            <option value="" disabled>Select Subcategory</option>
+            {categoryOptions[formData.category].map((sub, index) => (
+              <option key={index} value={sub}>
+                {sub}
+              </option>
+            ))}
+          </select>
+        )}
 
         <textarea
           className="inpp"
