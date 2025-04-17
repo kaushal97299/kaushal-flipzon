@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate, NavLink } from "react-router-dom";
 import { FaUser, FaBars, FaTimes, FaSearch } from "react-icons/fa";
+import { jwtDecode } from "jwt-decode";
 import "./Navbar.css";
 
 function Navb() {
@@ -9,6 +10,37 @@ function Navb() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+
+  // Token expiry handling
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        console.log("✅ Decoded Token:", decoded);
+
+        const currentTime = Math.floor(Date.now() / 1000);
+        const timeUntilExpiry = decoded.exp - currentTime;
+
+        if (timeUntilExpiry <= 0) {
+          console.log("⛔ Token already expired");
+          handleLogout();
+        } else {
+          console.log(`⏳ Token will expire in ${timeUntilExpiry} seconds`);
+          const timeoutId = setTimeout(() => {
+            console.log("🔒 Token expired, logging out");
+            handleLogout();
+          }, timeUntilExpiry * 1000);
+
+          return () => clearTimeout(timeoutId);
+        }
+      } catch (err) {
+        console.error("❌ Invalid token:", err);
+        handleLogout();
+      }
+    }
+  }, []);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -65,7 +97,6 @@ function Navb() {
           {/* Brand */}
           <Link className="brand" to="/">Client</Link>
 
-
           {/* Navigation Links - Desktop */}
           <ul className="linkks">
             <li><NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>Home</NavLink></li>
@@ -117,7 +148,7 @@ function Navb() {
           <li><NavLink to="/" className={({ isActive }) => isActive ? "active" : ""} onClick={toggleSidebar}>Home</NavLink></li>
           <li><NavLink to="/ProductForm" className={({ isActive }) => isActive ? "active" : ""} onClick={toggleSidebar}>Add Product</NavLink></li>
           <li><NavLink to="/ProductManagement" className={({ isActive }) => isActive ? "active" : ""} onClick={toggleSidebar}>Data Show</NavLink></li>
-          <li><NavLink to="ReviewTable" className={({ isActive }) => isActive ? "active" : ""} onClick={toggleSidebar}>Reviews</NavLink></li>
+          <li><NavLink to="/ProductReviewTable" className={({ isActive }) => isActive ? "active" : ""} onClick={toggleSidebar}>Reviews</NavLink></li>
         </ul>
 
         <form className="search-bar" onSubmit={handleSearch}>

@@ -3,13 +3,14 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { cartContext } from "./Cart/CartContext";
 import { FaShoppingCart, FaUser, FaBars, FaTimes, FaHeart, FaSearch } from "react-icons/fa";
 import Dropdown from "react-bootstrap/Dropdown";
+import { jwtDecode } from "jwt-decode";
 import "./Navbar.css";
 
 const Navbar1 = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")) || null);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { cart } = useContext(cartContext);
@@ -18,6 +19,42 @@ const Navbar1 = () => {
   const favoritesCount = Array.isArray(favorites)
     ? favorites.length
     : Object.keys(favorites).length;
+
+  // ✅ Token check and auto-logout
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const userData = localStorage.getItem("user");
+
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+
+    if (token) {
+      try {
+        const decoded = jwtDecode(token);
+        console.log("✅ Decoded token:", decoded);
+
+        const currentTime = Math.floor(Date.now() / 1000);
+        const timeUntilExpiry = decoded.exp - currentTime;
+
+        if (timeUntilExpiry <= 0) {
+          console.log("⛔ Token already expired");
+          handleLogout();
+        } else {
+          console.log(`⏳ Token will expire in ${timeUntilExpiry} seconds`);
+          const timeoutId = setTimeout(() => {
+            console.log("🔒 Token expired, logging out");
+            handleLogout();
+          }, timeUntilExpiry * 1000);
+
+          return () => clearTimeout(timeoutId);
+        }
+      } catch (err) {
+        console.error("❌ Invalid token:", err);
+        handleLogout();
+      }
+    }
+  }, []);
 
   useEffect(() => {
     if (location.pathname === "/ProductCardList") {
@@ -38,7 +75,6 @@ const Navbar1 = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    window.location.reload();
     navigate("/login");
   };
 
@@ -64,9 +100,9 @@ const Navbar1 = () => {
           Flipzon
         </Link>
 
-        <button 
-          className="navbar-toggler" 
-          type="button" 
+        <button
+          className="navbar-toggler"
+          type="button"
           aria-label="Toggle navigation"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
         >
@@ -92,14 +128,14 @@ const Navbar1 = () => {
             </li>
           </ul>
 
-          <form 
-            className={`searchbar ${isSearchFocused ? "focused" : ""}`} 
+          <form
+            className={`searchbar ${isSearchFocused ? "focused" : ""}`}
             onSubmit={handleSearch}
           >
             <input
               className="searchinput"
               type="search"
-              placeholder="Search Products..."  
+              placeholder="Search Products..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onFocus={(e) => {
@@ -116,9 +152,9 @@ const Navbar1 = () => {
 
           <ul className="nav-ul dropdownkimks">
             <li className="itemm likeofnav">
-              <Link 
-                className="nav-link" 
-                to="/favorites" 
+              <Link
+                className="nav-link"
+                to="/favorites"
                 onClick={() => setIsMenuOpen(false)}
                 aria-label="Favorites"
               >
@@ -130,9 +166,9 @@ const Navbar1 = () => {
             </li>
 
             <li className="itemm cartofnav">
-              <Link 
-                className="nav-link" 
-                to="/cart" 
+              <Link
+                className="nav-link"
+                to="/cart"
                 onClick={() => setIsMenuOpen(false)}
                 aria-label="Cart"
               >
@@ -150,9 +186,9 @@ const Navbar1 = () => {
                     <FaUser className="me-1" /> Hey, {user.name || "User"}
                   </Dropdown.Toggle>
                   <Dropdown.Menu className="dropdown-menu">
-                    <Dropdown.Item 
-                      as={Link} 
-                      to="/profile" 
+                    <Dropdown.Item
+                      as={Link}
+                      to="/profile"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       Profile
@@ -163,9 +199,9 @@ const Navbar1 = () => {
                   </Dropdown.Menu>
                 </Dropdown>
               ) : (
-                <Link 
-                  className="nav-link" 
-                  to="/login" 
+                <Link
+                  className="nav-link"
+                  to="/login"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <FaUser size={20} className="me-1" /> Account

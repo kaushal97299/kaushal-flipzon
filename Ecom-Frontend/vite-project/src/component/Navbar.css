@@ -254,6 +254,21 @@
   .nav-link, .dropdown-toggle {
     font-size: 0.95rem;
   }
+  .contat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .navbar-toggler {
+    order: 2; /* Push to the right */
+    margin-left: auto;
+  }
+
+  .navbar-brand {
+    order: 1; /* Ensure brand stays on the left */
+  }
+
 }
 @media (max-width: 360px) {
   .searchinput {
