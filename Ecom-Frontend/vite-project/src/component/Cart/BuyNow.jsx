@@ -73,9 +73,9 @@ const BuyNow = () => {
         key: "rzp_test_4xjKupfTBgr5M6",
         amount,
         currency,
-        name: "My E-Commerce",
+        name: "FlipZon",
         description: "Order Payment",
-        image: "/logo.png",
+        image: "/src/image/logo-removebg-preview.png",
         order_id: orderId,
         handler: async function (response) {
           const paymentData = {
