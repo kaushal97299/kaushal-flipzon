@@ -45,7 +45,7 @@ const Navbar1 = () => {
           const timeoutId = setTimeout(() => {
             console.log("🔒 Token expired, logging out");
             handleLogout();
-          }, (timeUntilExpiry-currentTime) * 1000);
+          }, timeUntilExpiry * 1000);
           
 
           return () => clearTimeout(timeoutId);
