@@ -244,12 +244,7 @@
     font-size: 1.5rem;
   }
 }
-@media (max-width: 480px) {
-  .contat {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
+
 @media (max-width: 400px) {
   .nav-link, .dropdown-toggle {
     font-size: 0.95rem;
@@ -273,6 +268,20 @@
 @media (max-width: 360px) {
   .searchinput {
     font-size: 0.9rem;
+  }
+  .contat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .navbar-toggler {
+    order: 2; /* Push to the right */
+    margin-left: auto;
+  }
+
+  .navbar-brand {
+    order: 1; /* Ensure brand stays on the left */
   }
 }
 @media (max-width: 320px) {
