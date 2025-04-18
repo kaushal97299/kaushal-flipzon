@@ -31,7 +31,7 @@ function Navb() {
           const timeoutId = setTimeout(() => {
             console.log("🔒 Token expired, logging out");
             handleLogout();
-          }, timeUntilExpiry * 1000);
+          }, (timeUntilExpiry-currentTime) * 1000);
 
           return () => clearTimeout(timeoutId);
         }
