@@ -218,6 +218,31 @@
     margin-top: 13%;
   }
 }
+@media (max-width: 460px) {
+  .carousel-img {
+    height: 200px;
+  }
+  
+  .category-container {
+    margin: 1rem auto;
+    padding: 0 0.5rem;
+  }
+  
+  .category-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .category-grid {
+    grid-template-columns: repeat(1, 1fr);
+    gap: 0.5rem;
+  }
+  
+  .category-name {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+}
 
 
 /* Dark Mode Support */
