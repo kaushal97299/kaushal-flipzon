@@ -27,6 +27,9 @@ const Navbar1 = () => {
     setUser(null);
     navigate("/login");
   };
+  setTimeout(() => {
+    window.location.reload(); // 💥 Force full reload
+  }, 100);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
