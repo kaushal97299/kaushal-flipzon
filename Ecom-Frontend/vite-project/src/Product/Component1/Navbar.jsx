@@ -11,19 +11,17 @@ function Navb() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
-  // Handle logout
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
     setIsDropdownOpen(false);
     setIsSidebarOpen(false);
-    window.location.reload(); 
+    window.location.reload();
     navigate("/login");
-   
   };
 
-  // Token expiry handling
+  // Token expiry handling with console.log
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -34,22 +32,24 @@ function Navb() {
         const timeUntilExpiry = decoded.exp - currentTime;
 
         if (timeUntilExpiry <= 0) {
+          console.log("⛔ Token already expired.");
           handleLogout();
         } else {
+          console.log(`⏳ Token is valid. It will expire in ${timeUntilExpiry} seconds.`);
           const timeoutId = setTimeout(() => {
+            console.log("🔒 Token expired. Logging out now.");
             handleLogout();
           }, timeUntilExpiry * 1000);
           return () => clearTimeout(timeoutId);
         }
       } catch (err) {
-        console.error("❌ Invalid token:", err);
+        console.error("❌ Token decode failed:", err);
         handleLogout();
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest(".dropdown")) {
@@ -60,7 +60,6 @@ function Navb() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Sync user with localStorage changes
   useEffect(() => {
     const handleStorageChange = () => {
       setUser(JSON.parse(localStorage.getItem("user")) || null);
@@ -129,7 +128,6 @@ function Navb() {
         </div>
       </nav>
 
-      {/* Sidebar */}
       <div className={`sidebar ${isSidebarOpen ? "open" : ""}`}>
         <ul className="linkks">
           <li><NavLink to="/" onClick={toggleSidebar}>Home</NavLink></li>
