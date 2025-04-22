@@ -41,7 +41,7 @@ function Navb() {
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ navigate]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -62,12 +62,13 @@ function Navb() {
     };
     window.addEventListener("storage", handleStorageChange);
     return () => window.removeEventListener("storage", handleStorageChange);
-  }, []);
+  }, [ ]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
+    window.location.reload();
     navigate("/login");
     setIsDropdownOpen(false);
     setIsSidebarOpen(false);
