@@ -25,7 +25,7 @@ const Navbar1 = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-     window.location.reload(); 
+    window.location.reload();
     navigate("/login");
   };
 

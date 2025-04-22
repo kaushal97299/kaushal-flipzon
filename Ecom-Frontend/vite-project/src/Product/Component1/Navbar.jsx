@@ -11,6 +11,7 @@ function Navb() {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
 
+  // Token expiry handling
   useEffect(() => {
     const token = localStorage.getItem("token");
 
@@ -30,7 +31,7 @@ function Navb() {
           const timeoutId = setTimeout(() => {
             console.log("🔒 Token expired, logging out");
             handleLogout();
-          }, timeUntilExpiry * 1000);
+          }, (timeUntilExpiry-currentTime) * 1000);
 
           return () => clearTimeout(timeoutId);
         }
@@ -39,9 +40,10 @@ function Navb() {
         handleLogout();
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (!event.target.closest('.dropdown')) {
@@ -53,6 +55,7 @@ function Navb() {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  // Sync user state with localStorage
   useEffect(() => {
     const handleStorageChange = () => {
       setUser(JSON.parse(localStorage.getItem("user")) || null);
@@ -65,14 +68,10 @@ function Navb() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
+    window.location.reload();
+    navigate("/login");
     setIsDropdownOpen(false);
     setIsSidebarOpen(false);
-
-    // 👇 Smooth logout behavior
-    setTimeout(() => {
-      navigate("/login");
-      window.location.reload();
-    }, 100);
   };
 
   const toggleSidebar = () => {
@@ -92,12 +91,15 @@ function Navb() {
     <>
       <nav className="navv">
         <div className="navrow">
+          {/* Mobile Menu Toggle */}
           <button className="menu-toggle" onClick={toggleSidebar}>
             {isSidebarOpen ? <FaTimes /> : <FaBars />}
           </button>
 
+          {/* Brand */}
           <Link className="brand" to="/">Client</Link>
 
+          {/* Navigation Links - Desktop */}
           <ul className="linkks">
             <li><NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>Home</NavLink></li>
             <li><NavLink to="/ProductForm" className={({ isActive }) => isActive ? "active" : ""}>Add Product</NavLink></li>
@@ -105,6 +107,7 @@ function Navb() {
             <li><NavLink to="/ProductReviewTable" className={({ isActive }) => isActive ? "active" : ""}>Reviews</NavLink></li>
           </ul>
 
+          {/* Search Bar - Desktop */}
           <form className="search-bar" onSubmit={handleSearch}>
             <input 
               type="text" 
@@ -117,6 +120,7 @@ function Navb() {
             </button>
           </form>
 
+          {/* User Dropdown - Desktop */}
           <div className="user-se">
             {user ? (
               <div className="dropdown">
@@ -140,6 +144,7 @@ function Navb() {
         </div>
       </nav>
 
+      {/* Mobile Sidebar */}
       <div className={`sidebar ${isSidebarOpen ? 'open' : ''}`}>
         <ul className="linkks">
           <li><NavLink to="/" className={({ isActive }) => isActive ? "active" : ""} onClick={toggleSidebar}>Home</NavLink></li>
@@ -182,6 +187,7 @@ function Navb() {
         </div>
       </div>
 
+      {/* Overlay */}
       <div className={`overlay ${isSidebarOpen ? 'open' : ''}`} onClick={toggleSidebar} />
     </>
   );
