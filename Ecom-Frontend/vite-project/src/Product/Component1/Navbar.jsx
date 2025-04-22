@@ -68,7 +68,6 @@ function Navb() {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
-    window.location.reload();
     navigate("/login");
     setIsDropdownOpen(false);
     setIsSidebarOpen(false);
