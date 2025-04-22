@@ -20,43 +20,45 @@ const Navbar1 = () => {
     ? favorites.length
     : Object.keys(favorites).length;
 
-  // ✅ Token check and auto-logout
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setUser(null);
+    navigate("/login");
+  };
+
+  // ✅ Token check and auto-logout even on reload
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
 
-    if (userData) {
-      setUser(JSON.parse(userData));
+    if (!token || !userData) {
+      handleLogout();
+      return;
     }
 
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        console.log("✅ Decoded token:", decoded);
+    setUser(JSON.parse(userData));
 
-        const currentTime = Math.floor(Date.now() / 1000);
-        const timeUntilExpiry = decoded.exp - currentTime;
+    try {
+      const decoded = jwtDecode(token);
+      const currentTime = Math.floor(Date.now() / 1000);
+      const timeUntilExpiry = decoded.exp - currentTime;
 
-        if (timeUntilExpiry <= 0) {
-          console.log("⛔ Token already expired");
-          handleLogout();
-        } else {
-          console.log(`⏳ Token will expire in ${timeUntilExpiry} seconds`);
-          const timeoutId = setTimeout(() => {
-            console.log("🔒 Token expired, logging out");
-            handleLogout();
-          }, timeUntilExpiry * 1000);
-          
-
-          return () => clearTimeout(timeoutId);
-        }
-      } catch (err) {
-        console.error("❌ Invalid token:", err);
+      if (timeUntilExpiry <= 0) {
         handleLogout();
+      } else {
+        const timeoutId = setTimeout(() => {
+          handleLogout();
+        }, timeUntilExpiry * 1000);
+
+        return () => clearTimeout(timeoutId);
       }
+    } catch (err) {
+      console.error("❌ Invalid token:", err);
+      handleLogout();
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [navigate]);
 
   useEffect(() => {
     if (location.pathname === "/ProductCardList") {
@@ -72,13 +74,6 @@ const Navbar1 = () => {
       document.body.style.overflow = "";
     };
   }, [isMenuOpen]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setUser(null);
-    navigate("/login");
-  };
 
   const handleSearch = (e) => {
     e.preventDefault();
