@@ -21,13 +21,13 @@ const Navbar1 = () => {
     : Object.keys(favorites).length;
 
   const handleLogout = () => {
+    console.log("Logging out user:", user);  // Log user data when they log out
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
     navigate("/login");
   };
 
-  // ✅ Token check and auto-logout even on reload
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userData = localStorage.getItem("user");
@@ -65,6 +65,7 @@ const Navbar1 = () => {
       const searchParams = new URLSearchParams(location.search);
       const query = searchParams.get("search") || "";
       setSearchQuery(query);
+      console.log("Current search query:", query); // Log search query from URL
     }
   }, [location]);
 
@@ -84,11 +85,17 @@ const Navbar1 = () => {
         location.pathname !== "/ProductCardList" ||
         currentParams.get("search") !== trimmedQuery
       ) {
+        console.log("Redirecting to search:", trimmedQuery);  // Log search query when redirecting
         navigate(`/ProductCardList?search=${encodeURIComponent(trimmedQuery)}`);
       }
     }
     setIsMenuOpen(false);
   };
+
+  // Log current window location whenever the component renders
+  useEffect(() => {
+    console.log("Current location URL:", window.location.href);
+  }, []);
 
   return (
     <nav className="navb" role="navigation">
