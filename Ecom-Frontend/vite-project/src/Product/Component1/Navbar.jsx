@@ -18,10 +18,9 @@ function Navb() {
     setUser(null);
     setIsDropdownOpen(false);
     setIsSidebarOpen(false);
+    window.location.reload(); 
     navigate("/login");
-    setTimeout(() => {
-      window.location.reload(); // Delay reload after navigation
-    }, 100);
+   
   };
 
   // Token expiry handling
