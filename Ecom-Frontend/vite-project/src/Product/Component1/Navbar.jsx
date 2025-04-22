@@ -24,7 +24,12 @@ function Navb() {
   // Token expiry handling with console.log
   useEffect(() => {
     const token = localStorage.getItem("token");
-
+     const userData = localStorage.getItem("user");
+    if (!token || !userData) {
+      handleLogout();
+      return;
+    }
+    setUser(JSON.parse(userData));
     if (token) {
       try {
         const decoded = jwtDecode(token);
