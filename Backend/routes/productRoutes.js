@@ -81,7 +81,7 @@ app.post("/add",  authMiddleware , upload.single("image"), async (req, res) => {
 });
 
 // ✅ Get All Products
-app.get("/prod", authMiddleware ,  async (req, res) => {
+app.get("/prod",  async (req, res) => {
   try {
     const products = await Product.find();
     res.json(products);
