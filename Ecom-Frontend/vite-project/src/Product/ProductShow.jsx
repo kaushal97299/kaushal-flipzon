@@ -7,31 +7,21 @@ import "react-toastify/dist/ReactToastify.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import jwtDecode from "jwt-decode";
 
 dayjs.extend(relativeTime);
 
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      const decoded = jwtDecode(token);
-      setUserInfo(decoded);
-    }
     fetchProducts();
   }, []);
 
   const fetchProducts = async () => {
     try {
-      const token = localStorage.getItem("token");
       setLoading(true);
-      const response = await axios.get("https://kaushal-flipzon.onrender.com/api/products/prod", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axios.get("https://kaushal-flipzon.onrender.com/api/products/prod");
       if (response.data && Array.isArray(response.data)) {
         setProducts(response.data);
       } else {
@@ -63,10 +53,7 @@ const ProductManagement = () => {
   return (
     <Container className="mt-5">
       <ToastContainer position="top-right" autoClose={3000} />
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Product List</h2>
-        {userInfo?.name && <h5 className="text-muted">Welcome, {userInfo.name}</h5>}
-      </div>
+      <h2 className="text-center mb-4">Product List</h2>
       {loading && (
         <div className="text-center my-3">
           <Spinner animation="border" role="status">
@@ -101,15 +88,18 @@ const ProductManagement = () => {
                 <td>{product.description || "No Description"}</td>
                 <td>{product.brand || "N/A"}</td>
                 <td>{product.discount || "0%"}</td>
-                <td>
-                  ₹{(product.price - (product.price * (product.discount || 0)) / 100).toFixed(2)}
-                </td>
+                <td>₹{(product.price - (product.price * (product.discount || 0)) / 100).toFixed(2)}</td>
                 <td title={product.offerEndDate ? new Date(product.offerEndDate).toLocaleString() : "N/A"}>
                   {product.offerEndDate ? dayjs(product.offerEndDate).fromNow() : "N/A"}
                 </td>
                 <td>
                   {product.image ? (
-                    <Image src={product.image} alt={product.name} thumbnail width={50} />
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      thumbnail
+                      width={50}
+                    />
                   ) : (
                     <p>No Image</p>
                   )}
