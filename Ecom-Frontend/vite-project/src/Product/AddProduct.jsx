@@ -81,12 +81,17 @@ const ProductForm = () => {
     data.append("image", formData.image);
 
     try {
+      const token = localStorage.getItem("token");
       setLoading(true);
       const response = await axios.post(
-        "https://kaushal-flipzon.onrender.com/api/products/add",
+        
+        "http://localhost:4000/api/products/add",
         data,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, 
+          },
         }
       );
 

@@ -3,6 +3,7 @@ const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require("../utils/cloudinary");
 const Product = require("../models/ProductSchema");
+const authMiddleware = require("../middleware/auth");
 
 const app = express.Router();
 
@@ -20,7 +21,7 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 
 // ✅ Add Product (with subcategory)
-app.post("/add", upload.single("image"), async (req, res) => {
+app.post("/add",  authMiddleware , upload.single("image"), async (req, res) => {
   try {
     if (!req.file)
       return res.status(400).json({ message: "Image is required" });
@@ -80,7 +81,7 @@ app.post("/add", upload.single("image"), async (req, res) => {
 });
 
 // ✅ Get All Products
-app.get("/prod", async (req, res) => {
+app.get("/prod", authMiddleware ,  async (req, res) => {
   try {
     const products = await Product.find();
     res.json(products);
