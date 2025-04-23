@@ -85,7 +85,7 @@ const ProductForm = () => {
       setLoading(true);
       const response = await axios.post(
         
-        "http://localhost:4000/api/products/add",
+        "https://kaushal-flipzon.onrender.com/api/products/add",
         data,
         {
           headers: {
