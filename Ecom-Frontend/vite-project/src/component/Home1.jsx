@@ -8,6 +8,8 @@ const Home1 = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  
+  
 
   // Fetch Carousel Images from Backend
   useEffect(() => {
@@ -27,7 +29,9 @@ const Home1 = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/prod`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/prod` ,{
+         
+        });
         const products = response.data || [];
         const categoryMap = new Map();
 

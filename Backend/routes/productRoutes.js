@@ -96,6 +96,32 @@ app.get("/prod/:userId", clientOnly , async (req, res) => {
   }
 });
 
+app.get("/add/:productId", async (req, res) => {
+  try {
+    const products = await Product.findById(req.params.productId);
+    res.json(products);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetching products", error: error.message });
+  }
+});
+
+app.get("/prod",  async (req, res) => {
+  console.log("Fetching all products...");
+  try {
+    const products = await Product.find({});
+    res.json(products);
+    console.log(products);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error fetchinggggg products", error: error.message });
+      console.log(error.message);
+  }
+});
+
+
 // ✅ Get Single Product by ID
 app.get("/singleprod/:id", clientOnly , async (req, res) => {
   try {
@@ -109,6 +135,7 @@ app.get("/singleprod/:id", clientOnly , async (req, res) => {
       .json({ message: "Error fetching product", error: error.message });
   }
 });
+
 
 // ✅ Delete Product
 app.delete("/:id", clientOnly , async (req, res) => {

@@ -23,7 +23,7 @@ const ProductDetail = () => {
     const fetchProductAndReviews = async () => {
       setLoading(true);
       try {
-        const productResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/prod/${id}`);
+        const productResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/add/${id}`);
         setProduct(productResponse.data);
 
         const reviewsResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/reviews/rew/${id}`);
