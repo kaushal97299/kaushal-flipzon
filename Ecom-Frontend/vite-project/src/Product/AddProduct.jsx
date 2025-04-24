@@ -36,6 +36,9 @@ const ProductForm = () => {
   const [subcategory, setSubcategory] = useState("");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
+  const user  = JSON.parse(localStorage.getItem("user"));
+   const userId  = user?._id ; 
+  //  console.log("userId",userId);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -70,6 +73,7 @@ const ProductForm = () => {
     }
 
     const data = new FormData();
+    data.append("userId", userId); 
     data.append("pname", formData.pname);
     data.append("price", formData.price);
     data.append("category", formData.category);
@@ -85,8 +89,8 @@ const ProductForm = () => {
       setLoading(true);
       const response = await axios.post(
         
-        "https://kaushal-flipzon.onrender.com/api/products/add",
-        data,
+        `${import.meta.env.VITE_API_URL}/api/products/add`,
+        data, 
         {
           headers: {
             "Content-Type": "multipart/form-data",

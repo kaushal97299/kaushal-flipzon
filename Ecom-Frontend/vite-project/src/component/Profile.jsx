@@ -51,7 +51,7 @@ const Profile = () => {
         formData.append("profileImage", user.profileImage);
       }
 
-      const response = await fetch("https://kaushal-flipzon.onrender.com/api/auth/profileupdate", {
+      const response = await fetch("${import.meta.env.VITE_API_URL}/api/auth/profileupdate", {
         method: "POST",
         body: formData,
       });
@@ -112,7 +112,7 @@ const Profile = () => {
           <>
             {user.profileImage && (
               <div className="profile-img-container">
-                <img src={`https://kaushal-flipzon.onrender.com/${user.profileImage}`} alt="Profile" />
+                <img src={`${import.meta.env.VITE_API_URL}/${user.profileImage}`} alt="Profile" />
               </div>
             )}
             <p className="proot"><strong>Name:</strong> {user.name}</p>

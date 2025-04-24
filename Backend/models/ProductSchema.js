@@ -20,6 +20,7 @@ const categories = Object.keys(categoryOptions).sort();
 
 const productSchema = new mongoose.Schema(
   {
+    userId : {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true},
     pname: { type: String, required: true, trim: true, maxlength: 100 },
     price: { type: Number, required: true, min: 0 },
 

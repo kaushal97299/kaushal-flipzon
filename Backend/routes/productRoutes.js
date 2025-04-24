@@ -3,7 +3,7 @@ const multer = require("multer");
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const cloudinary = require("../utils/cloudinary");
 const Product = require("../models/ProductSchema");
-const authMiddleware = require("../middleware/auth");
+const clientOnly = require("../middleware/auth");
 
 const app = express.Router();
 
@@ -21,12 +21,13 @@ const storage = new CloudinaryStorage({
 const upload = multer({ storage });
 
 // ✅ Add Product (with subcategory)
-app.post("/add",  authMiddleware , upload.single("image"), async (req, res) => {
+app.post("/add", clientOnly ,  upload.single("image"), async (req, res) => {
   try {
     if (!req.file)
       return res.status(400).json({ message: "Image is required" });
 
     const {
+      userId ,
       pname,
       price,
       category,
@@ -38,6 +39,7 @@ app.post("/add",  authMiddleware , upload.single("image"), async (req, res) => {
     } = req.body;
 
     if (
+      !userId ||
       !pname ||
       !price ||
       !category ||
@@ -57,6 +59,7 @@ app.post("/add",  authMiddleware , upload.single("image"), async (req, res) => {
     const imageUrl = req.file.path;
 
     const newProduct = new Product({
+      userId ,
       pname,
       price: parsedPrice,
       category,
@@ -73,6 +76,7 @@ app.post("/add",  authMiddleware , upload.single("image"), async (req, res) => {
     res
       .status(201)
       .json({ message: "Product added successfully", product: newProduct });
+      console.log(newProduct);
   } catch (error) {
     res
       .status(500)
@@ -81,9 +85,9 @@ app.post("/add",  authMiddleware , upload.single("image"), async (req, res) => {
 });
 
 // ✅ Get All Products
-app.get("/prod",  async (req, res) => {
+app.get("/prod/:userId", clientOnly , async (req, res) => {
   try {
-    const products = await Product.find();
+    const products = await Product.find({userId : req.params.userId});
     res.json(products);
   } catch (error) {
     res
@@ -93,7 +97,7 @@ app.get("/prod",  async (req, res) => {
 });
 
 // ✅ Get Single Product by ID
-app.get("/prod/:id", async (req, res) => {
+app.get("/singleprod/:id", clientOnly , async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product)
@@ -107,13 +111,13 @@ app.get("/prod/:id", async (req, res) => {
 });
 
 // ✅ Delete Product
-app.delete("/:id", async (req, res) => {
+app.delete("/:id", clientOnly , async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
     if (!product)
       return res.status(404).json({ message: "Product not found" });
 
-    // TODO: Optionally delete Cloudinary image via public_id
+    // TODO: Optionally delete Cloudinary image via public_id yoo
     res.json({ message: "Product deleted successfully" });
   } catch (err) {
     res
@@ -123,7 +127,7 @@ app.delete("/:id", async (req, res) => {
 });
 
 // ✅ Update Product (with subcategory)
-app.put("/:id", upload.single("image"), async (req, res) => {
+app.put("/:id", clientOnly , upload.single("image"), async (req, res) => {
   try {
     const product = await Product.findById(req.params.id);
     if (!product)

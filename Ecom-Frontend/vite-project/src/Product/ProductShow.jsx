@@ -13,6 +13,8 @@ dayjs.extend(relativeTime);
 const ProductManagement = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?._id;
 
   useEffect(() => {
     fetchProducts();
@@ -20,8 +22,13 @@ const ProductManagement = () => {
 
   const fetchProducts = async () => {
     try {
+
       setLoading(true);
-      const response = await axios.get("https://kaushal-flipzon.onrender.com/api/products/prod");
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/prod/${userId}` , {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       if (response.data && Array.isArray(response.data)) {
         setProducts(response.data);
       } else {
@@ -39,8 +46,13 @@ const ProductManagement = () => {
     if (!confirmDelete) return;
 
     try {
+      const token = localStorage.getItem("token");
       setLoading(true);
-      await axios.delete(`https://kaushal-flipzon.onrender.com/api/products/${id}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/products/${id}` , {
+        headers : {
+          Authorization: `Bearer ${token}`,
+        }
+      });
       toast.success("Product deleted successfully!");
       fetchProducts();
     } catch (error) {

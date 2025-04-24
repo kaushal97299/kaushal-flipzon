@@ -31,8 +31,15 @@ const UpdateProduct = () => {
 
   const fetchProduct = async () => {
     try {
+
+      const token = localStorage.getItem("token")
+      // console.log(token || "token expired")
       setLoading(true);
-      const response = await axios.get(`https://kaushal-flipzon.onrender.com/api/products/prod/${id}`);
+      const response = await axios.get(`http://localhost:4000/api/products/singleprod/${id}` , {
+        headers: {
+          Authorization : `Bearer ${token}`
+        },
+      });
       console.log("API Response:", response.data);
 
       if (response.data && typeof response.data === "object") {
@@ -68,6 +75,7 @@ const UpdateProduct = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const token = localStorage.getItem("token");
       setLoading(true);
       console.log("Submitting update for:", id);
 
@@ -79,8 +87,10 @@ const UpdateProduct = () => {
         formData.append("image", selectedFile);
       }
 
-      const response = await axios.put(`https://kaushal-flipzon.onrender.com/api/products/${id}`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/products/${id}`, formData, {
+        headers: { "Content-Type": "multipart/form-data"  ,
+           Authorization : `Bearer ${token}`
+        },
       });
 
       console.log("Update Response:", response.data);

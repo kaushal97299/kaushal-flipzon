@@ -13,7 +13,7 @@ const Home1 = () => {
   useEffect(() => {
     const fetchCarouselImages = async () => {
       try {
-        const response = await axios.get("https://kaushal-flipzon.onrender.com/api/carousel/images");
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/carousel/images`);
         setCarouselImages(response.data); // Array of image URLs
       } catch (error) {
         console.error("Error fetching carousel images:", error);
@@ -27,7 +27,7 @@ const Home1 = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get("https://kaushal-flipzon.onrender.com/api/products/prod");
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/prod`);
         const products = response.data || [];
         const categoryMap = new Map();
 
