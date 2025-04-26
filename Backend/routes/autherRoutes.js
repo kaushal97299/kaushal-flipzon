@@ -41,9 +41,10 @@ app.post("/send-otp", (req, res) => {
   const { email } = req.body;
 
   // Check if email is valid (basic validation)
-  if (!email || !email.includes("@")) {
-    return res.status(400).json({ message: "Invalid email format" });
-  }
+
+if (!email || !email.includes("@")) {
+  return res.status(400).json({ message: "Invalid email format" });
+}
 
   const otp = crypto.randomInt(100000, 999999);  // 6-digit OTP
   const otpTimestamp = Date.now(); 

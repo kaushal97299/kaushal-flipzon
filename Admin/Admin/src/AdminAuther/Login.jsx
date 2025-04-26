@@ -31,7 +31,7 @@ function AdminLogin() {
       return;
     }
     try {
-      const response = await axios.post("https://kaushal-flipzon.onrender.com/api/Adminsignup/Adminlogin", loginData);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/Adminsignup/Adminlogin`, loginData);
 
       // Extract token & user data from response
       const { token, user } = response.data;
@@ -43,7 +43,7 @@ function AdminLogin() {
       setUser(user);
 
       toast.success("✅ Login successful! Redirecting...", { position: "top-right" });
-
+       window.location.reload(); // Reload the page to reflect the new user state
       navigate('/AdminUser')
     } catch (error) {
       toast.error(error.response?.data?.message || "❌ Invalid credentials. Please try again.", {

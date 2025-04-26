@@ -27,7 +27,7 @@ function Orderdet() {
     const fetchOrderData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("https://kaushal-flipzon.onrender.com/api/orders/Orders");
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/orders/Orders`);
             setOrders(response.data || []);
             setFilteredOrders(response.data || []);
         } catch (error) {
@@ -39,7 +39,7 @@ function Orderdet() {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://kaushal-flipzon.onrender.com/api/orders/${id}`);
+            await axios.delete(`${import.meta.env.VITE_API_URL}/api/orders/${id}`);
             fetchOrderData();
             toast.success('Order deleted successfully');
         } catch (error) {

@@ -1,18 +1,22 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link ,useNavigate } from "react-router-dom";
 import { Navbar, Nav, Button, Dropdown, Container } from "react-bootstrap";
 import { FaUser, FaBars, FaTimes, FaBox, FaClipboardList, FaUsers, FaImages } from "react-icons/fa";
 import "bootstrap/dist/css/bootstrap.min.css";
+// import { useNavigate } from "react-router-dom";
 import "./adminNavbar.css"; // Import the CSS file
 
 const AdminNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [user, setUser] = useState(() => JSON.parse(localStorage.getItem("user")) || null);
+   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
     setUser(null);
+    window.location.reload(); // Reload the page to reflect the new user state
+    navigate("/Adminlogin"); // Redirect to login page
   };
 
   return (
