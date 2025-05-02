@@ -29,9 +29,13 @@ function Signup() {
     setOtp(e.target.value);
   };
 
-  const validateEmail = (email) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+  const validateEmail = (email) =>
+    /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+
   const validatePhone = (phone) => /^\d{10}$/.test(phone);
-  const validatePassword = (password) => /^[A-Za-z]+@+\d+$/.test(password) && password.length >= 9;
+
+  const validatePassword = (password) =>
+    /^[A-Za-z]+@+\d+$/.test(password) && password.length >= 9;
 
   // Send OTP
   const sendOtp = async () => {
@@ -42,17 +46,21 @@ function Signup() {
 
     setIsLoading(true);
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/send-otp`, {
-        email: formData.email,
-      });
-      
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/send-otp`,
+        {
+          email: formData.email,
+        }
+      );
+
       if (response) {
         toast.success("✅ OTP Sent to your email!");
+        setIsOtpSent(true);
       }
-      setIsOtpSent(true);
-      
     } catch (error) {
-      toast.error(error.response?.data?.message || "❌ Failed to send OTP. Try again.");
+      toast.error(
+        error.response?.data?.message || "❌ Failed to send OTP. Try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -67,17 +75,22 @@ function Signup() {
 
     setIsLoading(true);
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/verify-otp`, {
-        email: formData.email,
-        enteredOtp: otp,
-      });
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/verify-otp`,
+        {
+          email: formData.email,
+          enteredOtp: otp,
+        }
+      );
 
       if (response.status === 200) {
         toast.success("✅ OTP Verified!");
         setIsOtpVerified(true);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "❌ OTP verification failed. Try again.");
+      toast.error(
+        error.response?.data?.message || "❌ OTP verification failed. Try again."
+      );
     } finally {
       setIsLoading(false);
     }
@@ -96,7 +109,9 @@ function Signup() {
       return;
     }
     if (!validatePassword(formData.password)) {
-      toast.error("❌ Password must be at least 9 characters, contain letters first, then '@', and end with numbers!");
+      toast.error(
+        "❌ Password must be at least 9 characters, contain letters first, then '@', and end with numbers!"
+      );
       return;
     }
     if (formData.password !== formData.confirmPassword) {
@@ -106,11 +121,13 @@ function Signup() {
 
     setIsLoading(true);
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/signup`, formData);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/signup`,
+        formData
+      );
       if (response.status === 201) {
         toast.success("✅ Signup successful!");
         setTimeout(() => navigate("/login"), 1000);
-
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "❌ User already exists.");
@@ -122,11 +139,9 @@ function Signup() {
   return (
     <div className="contt">
       <Toaster position="top-right" />
-
       <h2 className="hg">Signup</h2>
 
       <form onSubmit={handleSubmit}>
-        {/* Name and Email Fields */}
         <input
           className="in1"
           type="text"
@@ -144,6 +159,7 @@ function Signup() {
           value={formData.email}
           onChange={handleChange}
           required
+          disabled={isOtpVerified}
         />
 
         {/* OTP Section */}
@@ -158,17 +174,27 @@ function Signup() {
               onChange={handleOtpChange}
               required
             />
-            <button type="button" className="but1" onClick={verifyOtp} disabled={isLoading}>
+            <button
+              type="button"
+              className="but1"
+              onClick={verifyOtp}
+              disabled={isLoading}
+            >
               {isLoading ? "Verifying..." : "Verify OTP"}
             </button>
           </>
         ) : (
-          <button type="button" className="but1" onClick={sendOtp} disabled={isLoading}>
+          <button
+            type="button"
+            className="but1"
+            onClick={sendOtp}
+            disabled={isLoading}
+          >
             {isLoading ? "Sending..." : "Send OTP"}
           </button>
         )}
 
-        {/* Only show the remaining form once OTP is verified */}
+        {/* Form continues after OTP verified */}
         {isOtpVerified && (
           <>
             <input
@@ -199,13 +225,25 @@ function Signup() {
               required
             />
 
-            <select name="role" value={formData.role} onChange={handleChange} className="in1" required>
+            <select
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="in1"
+              required
+            >
               <option value="">Select Role</option>
               <option value="client">Client</option>
               <option value="user">User</option>
             </select>
 
-            <select name="gender" value={formData.gender} onChange={handleChange} className="in1" required>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className="in1"
+              required
+            >
               <option value="">Select Gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
