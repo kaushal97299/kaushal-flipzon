@@ -36,9 +36,8 @@ const ProductForm = () => {
   const [subcategory, setSubcategory] = useState("");
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
-  const user  = JSON.parse(localStorage.getItem("user"));
-   const userId  = user?._id ; 
-  //  console.log("userId",userId);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const userId = user?._id;
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -62,18 +61,74 @@ const ProductForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.image) {
-      toast.error("Please select an image!");
+    // Product name validation
+    if (!formData.pname.trim()) {
+      toast.error("Product name is required!");
       return;
     }
 
+    // Price validation
+    if (!formData.price || parseFloat(formData.price) < 110) {
+      toast.error("Price must be at least ₹110!");
+      return;
+    }
+
+    // Category validation
+    if (!formData.category) {
+      toast.error("Please select a category!");
+      return;
+    }
+
+    // Subcategory validation
     if (!subcategory) {
       toast.error("Please select a subcategory!");
       return;
     }
 
+    // Description validation
+    if (!formData.description.trim() || formData.description.length < 10) {
+      toast.error("Description must be at least 10 characters!");
+      return;
+    }
+
+    // Brand validation
+    if (!formData.brand.trim()) {
+      toast.error("Brand is required!");
+      return;
+    }
+
+    // Discount validation
+    const discountValue = parseFloat(formData.discount);
+    if (
+      formData.discount === "" ||
+      isNaN(discountValue) ||
+      discountValue < 5 ||
+      discountValue > 100
+    ) {
+      toast.error("Discount must be at least 5% and no more than 100%!");
+      return;
+    }
+
+    // Offer End Date validation
+    if (!formData.offerEndDate) {
+      toast.error("Please select offer end date!");
+      return;
+    }
+    const offerEnd = new Date(formData.offerEndDate);
+    const today = new Date();
+    if (offerEnd < today) {
+      toast.error("Offer end date cannot be in the past!");
+      return;
+    }
+
+    // Image validation
+    if (!formData.image) {
+      toast.error("Please select an image!");
+      return;
+    }
+
     const data = new FormData();
-    data.append("userId", userId); 
+    data.append("userId", userId);
     data.append("pname", formData.pname);
     data.append("price", formData.price);
     data.append("category", formData.category);
@@ -88,13 +143,12 @@ const ProductForm = () => {
       const token = localStorage.getItem("token");
       setLoading(true);
       const response = await axios.post(
-        
         `${import.meta.env.VITE_API_URL}/api/products/add`,
-        data, 
+        data,
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`, 
+            Authorization: `Bearer ${token}`,
           },
         }
       );

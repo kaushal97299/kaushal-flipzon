@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -10,7 +10,6 @@ const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  // const [cart, setCart] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [newReview, setNewReview] = useState("");
   const [rating, setRating] = useState(0);
@@ -23,10 +22,14 @@ const ProductDetail = () => {
     const fetchProductAndReviews = async () => {
       setLoading(true);
       try {
-        const productResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/products/add/${id}`);
+        const productResponse = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/products/add/${id}`
+        );
         setProduct(productResponse.data);
 
-        const reviewsResponse = await axios.get(`${import.meta.env.VITE_API_URL}/api/reviews/rew/${id}`);
+        const reviewsResponse = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/reviews/rew/${id}`
+        );
         setReviews(reviewsResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -40,7 +43,7 @@ const ProductDetail = () => {
 
     const savedCart = JSON.parse(localStorage.getItem("cart")) || [];
     setCart(savedCart);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const calculateAverageRating = () => {
@@ -66,7 +69,9 @@ const ProductDetail = () => {
 
     if (existingItem) {
       updatedCart = cart.map((item) =>
-        item._id === product._id ? { ...item, quantity: item.quantity + 1 } : item
+        item._id === product._id
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
       );
     } else {
       updatedCart = [...cart, { ...product, quantity: 1 }];
@@ -103,7 +108,11 @@ const ProductDetail = () => {
         ? { headers: { Authorization: `Bearer ${user.token}` } }
         : {};
 
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/reviews/rew`, reviewData, config);
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/reviews/rew`,
+        reviewData,
+        config
+      );
       setReviews([response.data, ...reviews]);
       setNewReview("");
       setRating(0);
@@ -113,32 +122,6 @@ const ProductDetail = () => {
       toast.error(error.response?.data?.message || "Failed to submit review");
       if (error.response?.status === 401) {
         localStorage.removeItem("user");
-        // navigate("/login");
-      }
-    }
-  };
-
-  // Add this function to handle review deletion
-  const handleDeleteReview = async (reviewId) => {
-    if (!user) {
-      toast.error("You must be logged in to delete a review.");
-      return;
-    }
-
-    try {
-      const config = {
-        headers: { Authorization: `Bearer ${user.token}` }
-      };
-
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/reviews/${reviewId}`, config);
-      setReviews(reviews.filter(review => review._id !== reviewId));
-      toast.success("Review deleted successfully!");
-    } catch (error) {
-      console.error("Error deleting review:", error);
-      toast.error(error.response?.data?.message || "Failed to delete review");
-      if (error.response?.status === 401) {
-        localStorage.removeItem("user");
-        // navigate("/login");
       }
     }
   };
@@ -162,7 +145,10 @@ const ProductDetail = () => {
   if (loading) return <p className="loading">Loading product details...</p>;
   if (!product) return <p className="error">Product not found.</p>;
 
-  const discountedPrice = (product.price - (product.price * (product.discount / 100))).toFixed(2);
+  const discountedPrice = (
+    product.price -
+    (product.price * product.discount) / 100
+  ).toFixed(2);
   const averageRating = calculateAverageRating();
 
   return (
@@ -177,13 +163,14 @@ const ProductDetail = () => {
         </div>
         <div className="product-info-section">
           <h2 className="product-name">{product.pname}</h2>
-          
-          {/* Rating display under product name */}
+
+          {/* Rating */}
           <div className="product-rating-section">
             <div className="average-rating">
               {renderStars(averageRating, null)}
               <span className="rating-text">
-                {averageRating} ({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})
+                {averageRating} ({reviews.length}{" "}
+                {reviews.length === 1 ? "review" : "reviews"})
               </span>
             </div>
           </div>
@@ -196,15 +183,24 @@ const ProductDetail = () => {
               </span>
             )}
           </p>
-          
+
           <ul className="product-details">
-            <li><strong>Category:</strong> {product.category || "N/A"}</li>
-            <li><strong>Brand:</strong> {product.brand || "N/A"}</li>
-            <li><strong>Offer Ends On:</strong> {product.offerEndDate ? new Date(product.offerEndDate).toLocaleDateString() : "N/A"}</li>
+            <li>
+              <strong>Category:</strong> {product.category || "N/A"}
+            </li>
+            <li>
+              <strong>Brand:</strong> {product.brand || "N/A"}
+            </li>
+            <li>
+              <strong>Offer Ends On:</strong>{" "}
+              {product.offerEndDate
+                ? new Date(product.offerEndDate).toLocaleDateString()
+                : "N/A"}
+            </li>
           </ul>
-          
+
           <p className="product-description">{product.description}</p>
-          
+
           <div className="product-actions">
             <button className="add-to-cart-btn" onClick={addToCart}>
               🛒 Add to Cart
@@ -220,46 +216,37 @@ const ProductDetail = () => {
       <div className="reviews-section">
         <div className="add-review-section">
           <h5>Add Your Review</h5>
-          <div className="rating-input">
-            {renderStars(rating, setRating)}
-          </div>
-          <textarea 
-            className="review-textarea" 
-            value={newReview} 
-            onChange={(e) => setNewReview(e.target.value)} 
-            rows={4} 
+          <div className="rating-input">{renderStars(rating, setRating)}</div>
+          <textarea
+            className="review-textarea"
+            value={newReview}
+            onChange={(e) => setNewReview(e.target.value)}
+            rows={4}
             placeholder="Write your review..."
           />
           <button className="submit-review-btn" onClick={handleReviewSubmit}>
             Submit Review
           </button>
         </div>
-        
+
         <div className="customer-reviews-section">
           {reviews.length === 0 ? (
             <p className="no-reviews">No reviews yet. Be the first to review!</p>
           ) : (
-            reviews.map(review => (
+            reviews.map((review) => (
               <div key={review._id} className="review-item">
                 <div className="review-header">
                   <div className="review-rating">
                     {renderStars(review.rating, null)}
                   </div>
                   <div className="review-meta">
-                    <span className="review-author">{review.userName || "Anonymous"}</span>
+                    <span className="review-author">
+                      {review.userName || "Anonymous"}
+                    </span>
                     <span className="review-date">
                       {new Date(review.createdAt).toLocaleDateString()}
                     </span>
                   </div>
-                  {/* Add delete button - only show if current user is the review author */}
-                  {user && user._id === review.userId && (
-                    <button 
-                      className="delete-review-btn" 
-                      onClick={() => handleDeleteReview(review._id)}
-                    >
-                      Delete
-                    </button>
-                  )}
                 </div>
                 <p className="review-text">{review.text}</p>
               </div>

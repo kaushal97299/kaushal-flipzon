@@ -20,9 +20,19 @@ const categories = Object.keys(categoryOptions).sort();
 
 const productSchema = new mongoose.Schema(
   {
-    userId : {type: mongoose.Schema.Types.ObjectId, ref: "User", required: true},
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     pname: { type: String, required: true, trim: true, maxlength: 100 },
-    price: { type: Number, required: true, min: 0 },
+    price: { 
+      type: Number, 
+      required: true, 
+      min: 110,  // Price should be at least ₹110
+      validate: {
+        validator: function(value) {
+          return value >= 110;  // Price cannot be less than ₹110
+        },
+        message: "Price must be at least ₹110."
+      }
+    },
 
     category: {
       type: String,
@@ -43,10 +53,40 @@ const productSchema = new mongoose.Schema(
       },
     },
 
-    description: { type: String, required: true, trim: true },
-    brand: { type: String, required: true, trim: true },
-    discount: { type: Number, min: 0, max: 100, default: 0 },
-    offerEndDate: { type: Date },
+    description: { 
+      type: String, 
+      required: true, 
+      trim: true,
+      minlength: 10,  // Description should have at least 10 characters
+    },
+    brand: { 
+      type: String, 
+      required: true, 
+      trim: true,
+    },
+    
+    discount: { 
+      type: Number, 
+      min: 5, // Discount must be at least 5%
+      max: 100, 
+      default: 0,
+      validate: {
+        validator: function(value) {
+          return value >= 5 && value <= 100;
+        },
+        message: "Discount must be between 5% and 100%."
+      }
+    },
+
+    offerEndDate: { 
+      type: Date, 
+      validate: {
+        validator: function(value) {
+          return value > new Date();  // Offer end date must be in the future
+        },
+        message: "Offer end date must be a future date."
+      }
+    },
 
     image: {
       type: String,
@@ -59,7 +99,10 @@ const productSchema = new mongoose.Schema(
       },
     },
 
-    finalPrice: { type: Number, min: 0 },
+    finalPrice: { 
+      type: Number, 
+      min: 0,
+    },
   },
   { timestamps: true }
 );
