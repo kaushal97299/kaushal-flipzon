@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["client", "user"],
-      required: true,
+      // required: true,
       default: "user",
     },
 
