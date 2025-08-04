@@ -13,6 +13,10 @@ require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
+app.use(cors({
+  origin: ["https://kaushal-flipzon.netlify.app"],
+  credentials: true
+}));
 app.use("/uploads", express.static("uploads"));
 app.use("/ProfileImage", express.static("ProfileImage"));
 app.use("/uploadsCarou", express.static("uploadsCarou"));

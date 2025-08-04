@@ -58,31 +58,27 @@ function Login() {
   };
 
   // ✅ Handle Google Signup
-  const handleGoogleSignup = async (credentialResponse) => {
+ const handleGoogleSignup = async (credentialResponse) => {
     try {
-      const decoded = jwtDecode(credentialResponse.credential); // ✅ Fixed here
-
-      const googleUser = {
-        name: decoded.name,
+      const decoded = jwtDecode(credentialResponse.credential);
+      // 🔽 Send to backend
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/google-signup`, {
         email: decoded.email,
+        name: decoded.name,
         googleId: decoded.sub,
-      };
+      });
 
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/google-signup`,
-        googleUser
-      );
+      toast.success("Login Successful", { position: "top-center" });
+      setToken(data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("token", data.token);
 
-      if (response.status === 200 || response.status === 201) {
-        toast.success("✅ Google Signup Successful!");
-        navigate("/login");
-      }
-    } catch (error) {
-      toast.error("❌ Google Signup Failed!");
-      console.error(error);
+      navigate("/home");
+    } catch (err) {
+      console.error(err);
+      toast.error("Google Login Failed", { position: "top-center" });
     }
   };
-
   return (<>
   
     <div className="container1">
