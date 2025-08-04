@@ -29,7 +29,7 @@ function Login() {
     e.preventDefault();
 
     if (!loginData.email || !loginData.password) {
-      toast.warn("⚠️ Email and Password are required!", { position: "top-right" });
+      toast.warn("⚠ Email and Password are required!", { position: "top-right" });
       return;
     }
 
@@ -73,7 +73,7 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(data.user));
       localStorage.setItem("token", data.token);
 
-      navigate("/home");
+      navigate("/");
     } catch (err) {
       console.error(err);
       toast.error("Google Login Failed", { position: "top-center" });
@@ -82,13 +82,14 @@ function Login() {
   return (<>
   
     <div className="container1">
-        <div className="google-btn">
+        <div className="btuu">
           <GoogleLogin
             onSuccess={handleGooglelogin}
-            onError={() => toast.error("❌ Google Signup Failed!")}
+            onError={() => toast.error("❌ Google Login Failed!")}
           />
         </div>
-     <p className="or">OR</p>
+        <br/>
+     {/* <p className="or">OR</p> */}
       <h2 className="la2">Login</h2>
 
       <ToastContainer />
