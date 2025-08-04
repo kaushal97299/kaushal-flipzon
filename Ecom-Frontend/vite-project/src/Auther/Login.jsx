@@ -74,6 +74,7 @@ function Login() {
       localStorage.setItem("token", data.token);
 
       navigate("/");
+      window.location.reload();
     } catch (err) {
       console.error(err);
       toast.error("Google Login Failed", { position: "top-center" });
@@ -82,7 +83,7 @@ function Login() {
   return (<>
   
     <div className="container1">
-        <div className="btuu">
+        <div className="btuuv">
           <GoogleLogin
             onSuccess={handleGooglelogin}
             onError={() => toast.error("❌ Google Login Failed!")}
