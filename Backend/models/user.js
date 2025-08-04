@@ -1,20 +1,38 @@
 const mongoose = require("mongoose");
+
 const UserSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    phone: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
-    role: { type: String, enum: ["client", "user"], required: true },
-    gender: { type: String, enum: ["male", "female", "other"], required: true },
-    dob:{type:Date,},
-    address: { type: String, },
-    profileImage: { type: String,},
-    isVerified: { type: Boolean, default: true},
+    
+    phone: { type: String, unique: true, sparse: true }, // optional for Google users
 
-    // OTP fields
-    otp: { type: String, select: false }, // OTP stored securely
-    otpExpires: { type: Date, select: false }, // OTP expiration time
+    password: { type: String  }, // optional for Google users
+
+    role: {
+      type: String,
+      enum: ["client", "user"],
+      required: true,
+      default: "user",
+    },
+
+    gender: {
+      type: String,
+      enum: ["male", "female", "other"],
+      required: true,
+    },
+
+    dob: { type: Date },
+    address: { type: String },
+    profileImage: { type: String },
+
+    isVerified: { type: Boolean, default: true },
+
+    googleId: { type: String }, // <-- ✅ for Google users
+
+    // OTP fields (used only during email verification)
+    otp: { type: String, select: false },
+    otpExpires: { type: Date, select: false },
   },
   { timestamps: true }
 );

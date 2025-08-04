@@ -5,6 +5,8 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
 import { AuthContext } from "../store/AuthContaxt";
+import { GoogleLogin } from "@react-oauth/google";
+import {jwtDecode} from "jwt-decode"; // ✅ Correct import
 
 function Login() {
   const auth = useContext(AuthContext); // Get context first
@@ -55,8 +57,42 @@ function Login() {
     }
   };
 
-  return (
+  // ✅ Handle Google Signup
+  const handleGoogleSignup = async (credentialResponse) => {
+    try {
+      const decoded = jwtDecode(credentialResponse.credential); // ✅ Fixed here
+
+      const googleUser = {
+        name: decoded.name,
+        email: decoded.email,
+        googleId: decoded.sub,
+      };
+
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/google-signup`,
+        googleUser
+      );
+
+      if (response.status === 200 || response.status === 201) {
+        toast.success("✅ Google Signup Successful!");
+        navigate("/login");
+      }
+    } catch (error) {
+      toast.error("❌ Google Signup Failed!");
+      console.error(error);
+    }
+  };
+
+  return (<>
+  
     <div className="container1">
+        <div className="google-btn">
+          <GoogleLogin
+            onSuccess={handleGoogleSignup}
+            onError={() => toast.error("❌ Google Signup Failed!")}
+          />
+        </div>
+     <p className="or">OR</p>
       <h2 className="la2">Login</h2>
 
       <ToastContainer />
@@ -87,6 +123,7 @@ function Login() {
 
       <p>Don't have an account? <Link to="/signup">Signup here</Link></p>
     </div>
+    </>
   );
 }
 

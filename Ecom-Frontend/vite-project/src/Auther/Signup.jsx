@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 import "./Signup.css";
+import { GoogleLogin } from "@react-oauth/google";
+
 
 function Signup() {
   const [otp, setOtp] = useState("");
@@ -48,9 +50,7 @@ function Signup() {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/auth/send-otp`,
-        {
-          email: formData.email,
-        }
+        { email: formData.email }
       );
 
       if (response) {
@@ -135,6 +135,8 @@ function Signup() {
       setIsLoading(false);
     }
   };
+
+  
 
   return (
     <div className="contt">
@@ -256,6 +258,8 @@ function Signup() {
           </>
         )}
       </form>
+
+   
 
       <p className="pp">
         Already have an account? <Link to="/login">Login here</Link>

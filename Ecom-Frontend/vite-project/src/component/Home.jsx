@@ -172,7 +172,6 @@ const ProductCardList = ({ newProduct }) => {
             ))}
           </ul>
         </div>
-
         <div className="col-md-10 prodd">
           <h2 className="produ">Product List</h2>
 
@@ -268,5 +267,4 @@ const ProductCardList = ({ newProduct }) => {
     </div>
   );
 };
-
 export default ProductCardList;
