@@ -132,20 +132,41 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post("/google-signup", async (req, res) => {
+app.post("/google-login", async (req, res) => {
   try {
-    const { name, email, googleId } = req.body;
+    // console.log("✅ Received Google Login Data:", req.body);
+
+    const { email, name, googleId } = req.body;
+    if (!email || !googleId) {
+      return res.status(400).json({ success: false, message: "Missing required fields" });
+    }
 
     let user = await User.findOne({ email });
+
     if (!user) {
-      user = await User.create({ name, email, googleId, role: "user", gender: "other" });
+      user = new User({
+        email,
+        name,
+        googleId,
+        username: name,
+        password: "google-login-secret", // dummy password
+      });
+      await user.save();
+      // console.log("✅ New user saved:", user);
+    } else {
+      console.log("✅ Existing user found:", user);
     }
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    const userData = user.toObject();
-    delete userData.password;
-    res.status(200).json({ message: "Google signup/login successful", token, user: userData });
+
+    // 🔐 Create JWT Token
+    const token = JTW.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
+    });
+
+    res.status(200).json({ success: true, user, token }); // ✅ Send token to frontend
+
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    // console.error("❌ Google login error:", error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
 

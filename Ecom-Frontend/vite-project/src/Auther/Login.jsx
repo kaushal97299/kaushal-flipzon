@@ -58,11 +58,11 @@ function Login() {
   };
 
   // ✅ Handle Google Signup
- const handleGoogleSignup = async (credentialResponse) => {
+ const handleGooglelogin = async (credentialResponse) => {
     try {
       const decoded = jwtDecode(credentialResponse.credential);
       // 🔽 Send to backend
-      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/google-signup`, {
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/google-login`, {
         email: decoded.email,
         name: decoded.name,
         googleId: decoded.sub,
@@ -84,7 +84,7 @@ function Login() {
     <div className="container1">
         <div className="google-btn">
           <GoogleLogin
-            onSuccess={handleGoogleSignup}
+            onSuccess={handleGooglelogin}
             onError={() => toast.error("❌ Google Signup Failed!")}
           />
         </div>
