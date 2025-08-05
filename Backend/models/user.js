@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema(
 
     password: { type: String }, // optional for Google users
 
-    googleId: { type: String },
+    googleId: { type: String, required: false }, // Optional for normal login
 
     role: {
       type: String,
@@ -32,6 +32,8 @@ const UserSchema = new mongoose.Schema(
     profileImage: { type: String },
 
     isVerified: { type: Boolean, default: true },
+
+    loginType: { type: String, enum: ["normal", "google"], default: "normal" }, // ✅ Add comma here
 
     // OTP fields
     otp: { type: String, select: false },

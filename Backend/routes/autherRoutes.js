@@ -174,14 +174,16 @@ app.post("/google-login", async (req, res) => {
     let user = await User.findOne({ email });
 
     if (!user) {
-      // Create new Google user with minimal required fields
+      // Create new Google user with minimal required fields + dummy password
       user = new User({
         email,
         name,
         googleId,
-        isVerified: true,         // optional
-        role: "user",             // default
-        gender: "other",          // fallback if not provided
+        isVerified: true,
+        role: "user",
+        gender: "other",
+        password: "GOOGLE_USER_DUMMY_PASSWORD", // ✅ dummy password
+        loginType: "google", 
       });
 
       await user.save();
@@ -206,7 +208,7 @@ app.post("/google-login", async (req, res) => {
     res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
- 
+
 app.get('/users', async (req, res) => {
   try {
       const users = await User.find({}).select('-password');
