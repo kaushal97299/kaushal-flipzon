@@ -3,7 +3,7 @@ import axios from "axios";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import " ../Auther/ResetPassword.css"; // Assuming you have a CSS file for styling
+// Assuming you have a CSS file for styling
 function ResetPassword() {
   const [password, setPassword] = useState("");
   const [searchParams] = useSearchParams();

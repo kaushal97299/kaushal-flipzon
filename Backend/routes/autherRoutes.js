@@ -272,11 +272,11 @@ app.post("/forgot-password", async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Generate token
     const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
 
-    // Send Email
-    const resetLink = `https://kaushal-flipzon.netlify.app/resetpassword/:token/${resetToken}`; // Frontend link
+    // ✅ CORRECT URL - NO ":token", JUST USE ${resetToken}
+    const resetLink = `https://kaushal-flipzon.netlify.app/resetpassword/${resetToken}`;
+
     await transporter.sendMail({
       from: `Flipzon <${process.env.EMAIL_USER}>`,
       to: email,
@@ -294,17 +294,18 @@ app.post("/forgot-password", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
+
 // Reset Password using Token
 app.post("/reset-password", async (req, res) => {
   try {
-    const { token, newPassword } = req.body;
+    const { token, password } = req.body; // Changed to match frontend
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id);
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    user.password = newPassword; // (Optional: hash password in production)
+    user.password = password; // In production, hash it!
     await user.save();
 
     res.status(200).json({ message: "Password reset successful" });
@@ -313,5 +314,6 @@ app.post("/reset-password", async (req, res) => {
     res.status(400).json({ message: "Invalid or expired token" });
   }
 });
+
 
 module.exports = app
