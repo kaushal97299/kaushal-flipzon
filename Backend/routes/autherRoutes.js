@@ -263,4 +263,55 @@ app.post("/profileupdate",upload.single("profileImage"),async (req, res) => {
 console.log("error",error); 
     res.status(500).json({ message: "❌ Failed to update User", error: error.message });
   } });
+
+  // Send Reset Password Link via Email
+app.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    // Generate token
+    const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
+
+    // Send Email
+    const resetLink = `http://localhost:5173/reset-password/${resetToken}`; // Frontend link
+    await transporter.sendMail({
+      from: `Flipzon <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "Flipzon Password Reset Link",
+      html: `
+        <h2>Password Reset Requested</h2>
+        <p>Click the link below to reset your password. This link will expire in 15 minutes.</p>
+        <a href="${resetLink}">Reset Password</a>
+      `,
+    });
+
+    res.status(200).json({ message: "Password reset link sent to email" });
+  } catch (err) {
+    console.error("Forgot Password Error:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+// Reset Password using Token
+app.post("/reset-password", async (req, res) => {
+  try {
+    const { token, newPassword } = req.body;
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    user.password = newPassword; // (Optional: hash password in production)
+    await user.save();
+
+    res.status(200).json({ message: "Password reset successful" });
+  } catch (err) {
+    console.error("Reset Password Error:", err);
+    res.status(400).json({ message: "Invalid or expired token" });
+  }
+});
+
 module.exports = app

@@ -8,14 +8,12 @@ const UserSchema = new mongoose.Schema(
 
     phone: {
       type: String,
-      // phone is optional now
-      // unique: true, // ← Don't add unique unless enforced
-      sparse: true, // <- only indexes if present (good for optional)
+      sparse: true, // optional unique index
     },
 
-    password: { type: String }, // ✅ optional for Google users
+    password: { type: String }, // optional for Google users
 
-    googleId: { type: String }, // ✅ used in Google login
+    googleId: { type: String },
 
     role: {
       type: String,
@@ -26,7 +24,7 @@ const UserSchema = new mongoose.Schema(
     gender: {
       type: String,
       enum: ["male", "female", "other"],
-      required: false, // ✅ optional for Google login
+      required: false,
     },
 
     dob: { type: Date },
@@ -38,6 +36,10 @@ const UserSchema = new mongoose.Schema(
     // OTP fields
     otp: { type: String, select: false },
     otpExpires: { type: Date, select: false },
+
+    // ✅ Forgot password fields
+    resetToken: { type: String },
+    resetTokenExpiry: { type: Date },
   },
   { timestamps: true }
 );
