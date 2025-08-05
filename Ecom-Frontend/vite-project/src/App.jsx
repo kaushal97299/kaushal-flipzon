@@ -41,7 +41,7 @@ function App() {
         <>
           <Navbar1 />
           <Routes>
-        <Route path="/resetpassword" element={<ResetPassword/>} />
+        
             <Route path="/" element={isAuthenticated?<Home1 />:<Navigate to={"/login"}/>} />
             <Route path="/ProductCardList" element={<ProductCardList />} />
             {/* <Route path="/ProductCardLit" element={<ProductCardList />} /> */}
@@ -85,6 +85,7 @@ function App() {
           <Route path="/" element={<Navigate to={"/login"} />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/resetpassword/:token" element={<ResetPassword />} />
         </Routes>
       }
     </Router>
