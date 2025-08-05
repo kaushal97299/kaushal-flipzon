@@ -113,7 +113,8 @@ app.post("/verify-otp", (req, res) => {
     res.status(400).json({ message: "Invalid OTP" });
   }
 });
-
+ 
+// **User Registration Route**
 
 
 
