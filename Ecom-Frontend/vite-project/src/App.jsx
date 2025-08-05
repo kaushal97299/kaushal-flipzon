@@ -24,6 +24,7 @@ import OwnerHomePage from "./Product/Component1/OwnerHome";
 import Home1 from "./component/Home1";
 import ContactUs from "./Product/ContactUs";
 import ProductReviewTable from "./Product/Component1/Reviewcount";
+import ResetPassword from "./Auther/ResetPassword";
 // import ReviewTable from "./Product/Component1/Reviewcount";
 
 
@@ -44,6 +45,7 @@ function App() {
             <Route path="/ProductCardList" element={<ProductCardList />} />
             {/* <Route path="/ProductCardLit" element={<ProductCardList />} /> */}
             <Route path="/Profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
+            <Route path="/reset-password/:token" element={<ResetPassword/>} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/Cart" element={<Cart />} />
