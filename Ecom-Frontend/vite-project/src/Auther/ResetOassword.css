@@ -1,0 +1,48 @@
+.reset-container {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 30px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+}
+
+.reset-container h2 {
+  font-size: 28px;
+  margin-bottom: 25px;
+  color: #002db3;
+}
+
+.reset-container .inp2 {
+  width: 100%;
+  padding: 12px 15px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+
+.reset-container .inp2:focus {
+  border-color: #002db3;
+  outline: none;
+}
+
+.reset-container .btuu {
+  background-color: #002db3;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+  width: 100%;
+}
+
+.reset-container .btuu:hover {
+  background-color: #001f80;
+}

@@ -45,7 +45,7 @@ function App() {
             <Route path="/ProductCardList" element={<ProductCardList />} />
             {/* <Route path="/ProductCardLit" element={<ProductCardList />} /> */}
             <Route path="/Profile" element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
-            <Route path="/resetpassword" element={<ResetPassword />} />
+            <Route path="/resetpassword/:token" element={<ResetPassword />} />
             <Route path="/product/:id" element={<ProductDetail />} />
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/Cart" element={<Cart />} />

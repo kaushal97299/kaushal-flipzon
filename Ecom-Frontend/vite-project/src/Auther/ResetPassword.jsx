@@ -1,49 +1,53 @@
-// src/pages/ResetPassword.jsx
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { toast } from "react-toastify";
-import "./Login.css";
-
-const ResetPassword = () => {
-  const { token } = useParams();
-  const navigate = useNavigate();
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import " ../Auther/ResetPassword.css"; // Assuming you have a CSS file for styling
+function ResetPassword() {
   const [password, setPassword] = useState("");
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
+  const token = searchParams.get("token");
+  const email = searchParams.get("email");
 
   const handleReset = async () => {
     if (!password) {
-      toast.warning("Please enter new password");
+      toast.warn("⚠ Please enter a new password");
       return;
     }
 
     try {
+      // eslint-disable-next-line no-unused-vars
       const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/reset-password`, {
+        email,
         token,
-        newPassword: password,
+        password,
       });
 
-      toast.success(res.data.message);
-      navigate("/login");
+      toast.success("✅ Password reset successful");
+      setTimeout(() => navigate("/login"), 2000);
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
-      toast.error(err.response?.data?.message || "Error resetting password");
+      toast.error("❌ Reset failed. Try again.");
     }
   };
 
   return (
-    <div className="container1">
+    <div className="reset-container">
+      <ToastContainer />
       <h2>Reset Password</h2>
       <input
-        type="password"
         className="inp2"
+        type="password"
         placeholder="Enter new password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <button className="btuu" onClick={handleReset}>
-        Submit
-      </button>
+      <button className="btuu" onClick={handleReset}>Reset Password</button>
     </div>
   );
-};
+}
 
 export default ResetPassword;
