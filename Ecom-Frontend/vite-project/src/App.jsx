@@ -36,12 +36,12 @@ function App() {
   console.log(role)
   return (
     <Router>
-      <Route path="/resetpassword" element={<ResetPassword/>} />
       {
         role == "user" &&
         <>
           <Navbar1 />
           <Routes>
+        <Route path="/resetpassword" element={<ResetPassword/>} />
             <Route path="/" element={isAuthenticated?<Home1 />:<Navigate to={"/login"}/>} />
             <Route path="/ProductCardList" element={<ProductCardList />} />
             {/* <Route path="/ProductCardLit" element={<ProductCardList />} /> */}
