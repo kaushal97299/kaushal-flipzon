@@ -276,7 +276,7 @@ app.post("/forgot-password", async (req, res) => {
     const resetToken = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "15m" });
 
     // Send Email
-    const resetLink = `https://kaushal-flipzon.netlify.app/reset-password/:token/${resetToken}`; // Frontend link
+    const resetLink = `https://kaushal-flipzon.netlify.app/reset-password/${resetToken}`; // Frontend link
     await transporter.sendMail({
       from: `Flipzon <${process.env.EMAIL_USER}>`,
       to: email,
