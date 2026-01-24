@@ -39,21 +39,18 @@ const OTP_EXPIRY_TIME = 5 * 60 * 1000; // 5 minutes
 app.post("/send-otp", async (req, res) => {
   try {
     const { email } = req.body;
-
-    if (!email || !email.includes("@")) {
-      return res.status(400).json({ message: "Invalid email format" });
-    }
+    const cleanEmail = email.toLowerCase();
 
     const otp = crypto.randomInt(100000, 999999);
 
-    otpDatabase[email] = {
-      otp,
+    otpDatabase[cleanEmail] = {
+      otp: String(otp), // 🔥 string में save
       timestamp: Date.now(),
     };
 
     await transporter.sendMail({
       from: `Flipzon <${process.env.EMAIL_USER}>`,
-      to: email,
+      to: cleanEmail,
       subject: "Verify Your Email - Flipzon",
       html: `<h2>Your OTP: ${otp}</h2><p>Valid for 5 minutes</p>`,
     });
@@ -65,33 +62,35 @@ app.post("/send-otp", async (req, res) => {
   }
 });
 
+
  
 // Endpoint to verify OTP
 app.post("/verify-otp", (req, res) => {
   const { email, enteredOtp } = req.body;
+  const cleanEmail = email.toLowerCase();
 
-  if (!otpDatabase[email]) {
-    return res.status(400).json({ message: "OTP not found for this email" });
+  const record = otpDatabase[cleanEmail];
+
+  if (!record) {
+    return res.status(400).json({ message: "OTP not found. Please resend." });
   }
 
-  const { otp, timestamp } = otpDatabase[email];
-
-  // Check if OTP has expired
-  const currentTime = Date.now();
-  if (currentTime - timestamp > OTP_EXPIRY_TIME) {
-    delete otpDatabase[email]; // Remove expired OTP from memory
-    return res.status(400).json({ message: "OTP has expired. Please request a new one." });
+  // expiry check
+  if (Date.now() - record.timestamp > OTP_EXPIRY_TIME) {
+    delete otpDatabase[cleanEmail];
+    return res.status(400).json({ message: "OTP expired" });
   }
 
-  // Validate the OTP
-  if (otp === parseInt(enteredOtp)) {
-    res.status(200).json({ message: "OTP Verified successfully" });
-    delete otpDatabase[email]; // OTP successfully verified, remove from database
-  } else {
-    res.status(400).json({ message: "Invalid OTP" });
+  // 🔥 STRING comparison (MOST IMPORTANT)
+  if (String(record.otp) !== String(enteredOtp)) {
+    return res.status(400).json({ message: "Invalid OTP" });
   }
+
+  // success
+  delete otpDatabase[cleanEmail]; // one-time use
+  res.status(200).json({ success: true, message: "OTP verified" });
 });
- 
+
 // **User Registration Route**
 
 
