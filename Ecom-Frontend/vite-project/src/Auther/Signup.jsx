@@ -69,7 +69,7 @@ function Signup() {
   // Verify OTP
   const verifyOtp = async () => {
     if (!otp) {
-      toast.error("❌ Please enter the OTP!");
+      toast.error("❌ Please enter the OTP! ");
       return;
     }
 
