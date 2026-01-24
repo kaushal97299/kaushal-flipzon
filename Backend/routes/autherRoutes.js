@@ -37,44 +37,46 @@ let otpDatabase = {};
 const OTP_EXPIRY_TIME = 5 * 60 * 1000; // 5 minutes
 // Endpoint to send OTP to the user's email
 
-app.post("/send-otp", (req, res) => {
-  const { email } = req.body;
+app.post("/send-otp", async (req, res) => {
+  try {
+    const { email } = req.body;
 
-  // Check if email is valid (basic validation)
+    if (!email || !email.includes("@")) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
 
-if (!email || !email.includes("@")) {
-  return res.status(400).json({ message: "Invalid email format" });
-}
+    const otp = crypto.randomInt(100000, 999999);
 
-  const otp = crypto.randomInt(100000, 999999);  // 6-digit OTP
-  const otpTimestamp = Date.now(); 
+    otpDatabase[email] = {
+      otp,
+      timestamp: Date.now(),
+    };
 
-  otpDatabase[email] = { otp, timestamp: otpTimestamp }; // Save OTP and timestamp
-  // Send OTP to user's email
-  const mailOptions = {
-    from: `Flipzon <${process.env.EMAIL_USER}>`,
-    to: email,
-    subject: "Verify Your Email Address - Flipzon",
-    html: `
-    <div style="max-width: 600px; margin: auto; font-family: Arial, sans-serif; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
-      <div style="background-color: #002db3; padding: 20px; text-align: center;">
-        <h1 style="color: white; margin: 0;">Flipzon</h1>
-      </div>
-      <div style="padding: 30px; text-align: center;">
-        <img src="https://i.ibb.co/d0vhSHN8/logo-removebg-preview.png" alt="Verify Icon" width="60" style="margin-bottom: 20px;" />
-        
-        <h2>Verify Your Email Address</h2>
-        <p style="font-size: 16px; color: #444;">Verify your email to finish signing up with Flipzon. Use the following verification code:</p>
-        <div style="font-size: 32px; font-weight: bold; margin: 20px 0; color: #002db3;">${otp}</div>
-        <p style="color: #888;">The verification code is valid for 5 minutes.</p>
-      </div>
-      <div style="padding: 20px; background-color: #f9f9f9; text-align: center; font-size: 12px; color: #666;">
-        For any queries or concerns, feel free to contact us by replying to this email.
-      </div>
-    </div>
-    `
-  };
+    await transporter.sendMail({
+      from: `Flipzon <${process.env.EMAIL_USER}>`,
+      to: email,
+      subject: "Verify Your Email - Flipzon",
+      html: `
+        <h2>Flipzon Verification</h2>
+        <p>Your OTP:</p>
+        <h1>${otp}</h1>
+        <p>Valid for 5 minutes</p>
+      `,
+    });
 
+    return res.status(200).json({
+      success: true,
+      message: "OTP sent successfully",
+    });
+
+  } catch (error) {
+    console.error("Send OTP Error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to send OTP",
+    });
+  }
+});
 
   // eslint-disable-next-line no-unused-vars
   transporter.sendMail(mailOptions, (error, info) => {
@@ -87,7 +89,6 @@ if (!email || !email.includes("@")) {
       });
     }
   });
-});
 // Endpoint to verify OTP
 app.post("/verify-otp", (req, res) => {
   const { email, enteredOtp } = req.body;
