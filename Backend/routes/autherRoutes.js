@@ -30,13 +30,12 @@ const upload = multer({ storage });
   service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS, 
+    pass: process.env.EMAIL_PASS,
   },
-})
+});
 let otpDatabase = {}; 
 const OTP_EXPIRY_TIME = 5 * 60 * 1000; // 5 minutes
 // Endpoint to send OTP to the user's email
-
 app.post("/send-otp", async (req, res) => {
   try {
     const { email } = req.body;
@@ -56,39 +55,17 @@ app.post("/send-otp", async (req, res) => {
       from: `Flipzon <${process.env.EMAIL_USER}>`,
       to: email,
       subject: "Verify Your Email - Flipzon",
-      html: `
-        <h2>Flipzon Verification</h2>
-        <p>Your OTP:</p>
-        <h1>${otp}</h1>
-        <p>Valid for 5 minutes</p>
-      `,
+      html: `<h2>Your OTP: ${otp}</h2><p>Valid for 5 minutes</p>`,
     });
 
-    return res.status(200).json({
-      success: true,
-      message: "OTP sent successfully",
-    });
-
-  } catch (error) {
-    console.error("Send OTP Error:", error);
-    return res.status(500).json({
-      success: false,
-      message: "Failed to send OTP",
-    });
+    res.status(200).json({ success: true, message: "OTP sent" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "OTP failed" });
   }
 });
 
-  // eslint-disable-next-line no-unused-vars
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      return res.status(500).json({ message: "Error sending OTP", error });
-    } else {
-      res.status(200).json({
-        message: "OTP sent successfully",
-        otpSentAt: otpTimestamp, // Send the time OTP was generated
-      });
-    }
-  });
+ 
 // Endpoint to verify OTP
 app.post("/verify-otp", (req, res) => {
   const { email, enteredOtp } = req.body;
