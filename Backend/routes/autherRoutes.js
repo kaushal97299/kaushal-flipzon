@@ -48,12 +48,56 @@ app.post("/send-otp", async (req, res) => {
       timestamp: Date.now(),
     };
 
-    await transporter.sendMail({
-      from: `Flipzon <${process.env.EMAIL_USER}>`,
-      to: cleanEmail,
-      subject: "Verify Your Email - Flipzon",
-      html: `<h2>Your OTP: ${otp}</h2><p>Valid for 5 minutes</p>`,
-    });
+  await transporter.sendMail({
+  from: `Flipzon <${process.env.EMAIL_USER}>`,
+  to: cleanEmail,
+  subject: "Your Flipzon Verification Code",
+  text: `Your OTP code is ${otp}. This code is valid for 5 minutes. Do not share it with anyone.`,
+  html: `
+  <div style="font-family: Arial, sans-serif; background:#f4f6fb; padding:30px">
+    <div style="max-width:520px; margin:auto; background:#ffffff; border-radius:12px; padding:30px; box-shadow:0 10px 30px rgba(0,0,0,0.08)">
+      
+      <h2 style="margin:0 0 10px; color:#1e293b; text-align:center;">
+        Verify Your Email
+      </h2>
+
+      <p style="color:#475569; font-size:14px; text-align:center;">
+        Use the code below to complete your signup on <b>Flipzon</b>
+      </p>
+
+      <div style="margin:30px 0; text-align:center;">
+        <span style="
+          display:inline-block;
+          font-size:28px;
+          letter-spacing:6px;
+          font-weight:bold;
+          color:#4f46e5;
+          background:#eef2ff;
+          padding:14px 24px;
+          border-radius:10px;
+        ">
+          ${otp}
+        </span>
+      </div>
+
+      <p style="font-size:13px; color:#64748b; text-align:center;">
+        This OTP is valid for <b>5 minutes</b>.  
+        Please do not share this code with anyone.
+      </p>
+
+      <hr style="border:none; border-top:1px solid #e5e7eb; margin:25px 0">
+
+      <p style="font-size:12px; color:#94a3b8; text-align:center;">
+        If you didn’t request this, you can safely ignore this email.
+      </p>
+
+      <p style="font-size:12px; color:#94a3b8; text-align:center;">
+        © ${new Date().getFullYear()} Flipzon. All rights reserved.
+      </p>
+    </div>
+  </div>
+  `,
+});
 
     res.status(200).json({ success: true, message: "OTP sent" });
   } catch (err) {
