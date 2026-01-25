@@ -26,72 +26,36 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS, // ⚠️ NO SPACES in Render env
-  },
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
+const { Resend } = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Verify transporter at server start
-transporter.verify((err, success) => {
-  if (err) {
-    console.error("❌ SMTP ERROR:", err);
-  } else {
-    console.log("✅ SMTP READY");
-  }
-});
-
-let otpDatabase = {};
-const OTP_EXPIRY_TIME = 5 * 60 * 1000;
-
-// ================= SEND OTP =================
 app.post("/send-otp", async (req, res) => {
   try {
     const { email } = req.body;
-    if (!email) {
-      return res.status(400).json({ message: "Email required" });
-    }
+    if (!email) return res.status(400).json({ message: "Email required" });
 
     const cleanEmail = email.toLowerCase();
-    const otp = crypto.randomInt(100000, 999999).toString();
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
     otpDatabase[cleanEmail] = {
       otp,
       timestamp: Date.now(),
     };
 
-    await transporter.sendMail({
-      from: `"Flipzon" <${process.env.EMAIL_USER}>`,
+    await resend.emails.send({
+      from: "Flipzon <onboarding@resend.dev>",
       to: cleanEmail,
-      subject: "Your Flipzon Verification Code",
-      text: `Your OTP code is ${otp}. It is valid for 5 minutes.`,
-      html: `
-        <div style="font-family:Arial;background:#f4f6fb;padding:30px">
-          <div style="max-width:520px;margin:auto;background:#fff;border-radius:12px;padding:30px">
-            <h2 style="text-align:center">Verify Your Email</h2>
-            <p style="text-align:center">Your OTP</p>
-            <h1 style="text-align:center;letter-spacing:6px">${otp}</h1>
-            <p style="text-align:center;font-size:12px">Valid for 5 minutes</p>
-          </div>
-        </div>
-      `,
+      subject: "Your OTP Code",
+      html: `<h2>Your OTP: ${otp}</h2><p>Valid for 5 minutes</p>`,
     });
 
-    res.status(200).json({ success: true, message: "OTP sent successfully" });
-
+    res.status(200).json({ success: true, message: "OTP sent" });
   } catch (err) {
-    console.error("❌ SEND OTP ERROR:", err);
-    res.status(500).json({ message: err.message || "OTP failed" });
+    console.error("OTP ERROR:", err);
+    res.status(500).json({ message: err.message });
   }
 });
- 
+
 // Endpoint to verify OTP
 app.post("/verify-otp", (req, res) => {
   const { email, enteredOtp } = req.body;
