@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/autherRoutes");
@@ -9,7 +10,6 @@ const reviewRoutes = require('./routes/reviewRoutes');
 const contactt =require("./routes/ContactRoutes")
 const getCarousel = require("./routes/uploadCarousel")
 const app = express();
-require("dotenv").config();
 
 app.use(express.json());
 app.use(cors());
@@ -32,5 +32,5 @@ app.use("/api/carousel", getCarousel);
 
 
 connectDB();
-const PORT=process.env.PORT || 4000;
+const PORT=process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
