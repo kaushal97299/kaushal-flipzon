@@ -33,6 +33,14 @@ const upload = multer({ storage });
     pass: process.env.EMAIL_PASS,
   },
 });
+
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("MAIL ERROR:", error);
+  } else {
+    console.log("MAIL READY");
+  }
+});
 let otpDatabase = {}; 
 const OTP_EXPIRY_TIME = 5 * 60 * 1000; // 5 minutes
 // Endpoint to send OTP to the user's email
