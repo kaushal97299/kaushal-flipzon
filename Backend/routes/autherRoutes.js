@@ -2,24 +2,18 @@ const express = require("express");
 const jwt = require("jsonwebtoken");
 // const User = require("../models/User");
 const User =require("../models/user")
-
+const nodemailer = require("nodemailer");
 const crypto = require("crypto");
 const cors = require("cors");
 require("dotenv").config();
 const multer = require("multer");
 const fs = require("fs");
 const path = require("path");
-
-const { Resend } = require("resend");
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-
 const app = express();
 
 
 app.use(express.json());
 app.use(cors());
-
 
 // Ensure upload directory exists
 const uploadDir = path.join(__dirname, "../ProfileImage"); 
@@ -32,13 +26,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
  // Store securely in environment variables
-//  const transporter = nodemailer.createTransport({
-//   service: "gmail",
-//   auth: {
-//     user: process.env.EMAIL_USER,
-//     pass: process.env.EMAIL_PASS,
-//   },
-// });
+ const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 let otpDatabase = {}; 
 const OTP_EXPIRY_TIME = 5 * 60 * 1000; // 5 minutes
 // Endpoint to send OTP to the user's email
@@ -48,20 +42,20 @@ app.post("/send-otp", async (req, res) => {
     if (!email) return res.status(400).json({ message: "Email required" });
 
     const cleanEmail = email.toLowerCase();
-    const otp = crypto.randomInt(100000, 999999);
+    const otp = crypto.randomInt(100000, 999999).toString();
 
     otpDatabase[cleanEmail] = {
-      otp: String(otp),
+      otp,
       timestamp: Date.now(),
     };
 
-    await resend.emails.send({
-      from: "Flipzon <onboarding@resend.dev>", // default domain (works)
+    await transporter.sendMail({
+      from: `Flipzon <${process.env.EMAIL_USER}>`,
       to: cleanEmail,
       subject: "Your Flipzon Verification Code",
       html: `
         <div style="font-family:Arial;padding:20px">
-          <h2>Verify your email</h2>
+          <h2>Email Verification</h2>
           <p>Your OTP code is:</p>
           <h1 style="letter-spacing:6px">${otp}</h1>
           <p>Valid for 5 minutes</p>
@@ -71,7 +65,7 @@ app.post("/send-otp", async (req, res) => {
 
     res.status(200).json({ success: true, message: "OTP sent" });
   } catch (err) {
-    console.error("OTP Error:", err);
+    console.error("OTP ERROR:", err);
     res.status(500).json({ message: "OTP failed" });
   }
 });
