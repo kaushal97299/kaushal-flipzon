@@ -32,13 +32,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
  // Store securely in environment variables
- const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+//  const transporter = nodemailer.createTransport({
+//   service: "gmail",
+//   auth: {
+//     user: process.env.EMAIL_USER,
+//     pass: process.env.EMAIL_PASS,
+//   },
+// });
 let otpDatabase = {}; 
 const OTP_EXPIRY_TIME = 5 * 60 * 1000; // 5 minutes
 // Endpoint to send OTP to the user's email
