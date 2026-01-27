@@ -2,18 +2,32 @@ const mongoose = require("mongoose");
 
 const UserSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: {
+      type: String,
+      required: true,
+      trim: true,
+    },
 
-    email: { type: String, required: true, unique: true },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
 
     phone: {
       type: String,
-      sparse: true, // optional unique index
+      trim: true,
     },
 
-    password: { type: String }, // optional for Google users
+    password: {
+      type: String, // optional for Google users
+    },
 
-    googleId: { type: String, required: false }, // Optional for normal login
+    googleId: {
+      type: String, // optional for normal users
+    },
 
     role: {
       type: String,
@@ -24,24 +38,39 @@ const UserSchema = new mongoose.Schema(
     gender: {
       type: String,
       enum: ["male", "female", "other"],
-      required: false,
     },
 
-    dob: { type: Date },
-    address: { type: String },
-    profileImage: { type: String },
+    dob: {
+      type: Date,
+    },
 
-    isVerified: { type: Boolean, default: true },
+    address: {
+      type: String,
+    },
 
-    loginType: { type: String, enum: ["normal", "google"], default: "normal" }, // ✅ Add comma here
+    profileImage: {
+      type: String,
+    },
 
-    // OTP fields
-    otp: { type: String, select: false },
-    otpExpires: { type: Date, select: false },
+    isVerified: {
+      type: Boolean,
+      default: true, // since no OTP, user is verified directly
+    },
 
-    // ✅ Forgot password fields
-    resetToken: { type: String },
-    resetTokenExpiry: { type: Date },
+    loginType: {
+      type: String,
+      enum: ["normal", "google"],
+      default: "normal",
+    },
+
+    // Forgot password fields
+    resetToken: {
+      type: String,
+    },
+
+    resetTokenExpiry: {
+      type: Date,
+    },
   },
   { timestamps: true }
 );
